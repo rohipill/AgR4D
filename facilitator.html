@@ -181,6 +181,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
       <div class="alert-error" id="err-api" style="margin-top:.75rem"></div>
       <div class="btn-row">
         <button class="btn btn-primary" id="btn-generate" onclick="generateLinks()">Save project &amp; generate links</button>
+        <button class="btn btn-sm" onclick="clearForm()" style="color:var(--text-muted)">Clear form</button>
       </div>
     </div>
 
@@ -317,6 +318,18 @@ function switchFTab(tab){
 /* ── Project setup ── */
 function onProjectChange(){ document.getElementById('links-output').style.display='none'; }
 
+function clearForm(){
+  if(!confirm('Clear all project fields and partner entries?')) return;
+  document.getElementById('fac-project').value='';
+  document.getElementById('fac-start').value='';
+  document.getElementById('fac-end').value='';
+  document.getElementById('partner-entries').innerHTML='';
+  document.getElementById('links-out').innerHTML='';
+  document.getElementById('err-partners').classList.remove('show');
+  localStorage.removeItem('ar4d_project_id');
+  history.replaceState(null,'',location.pathname);
+  addPartnerEntry();
+}
 function addPartnerEntry(){
   var container=document.getElementById('partner-entries');
   var div=document.createElement('div');
