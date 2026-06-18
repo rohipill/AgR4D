@@ -321,6 +321,8 @@ function onProjectChange(){ document.getElementById('links-output').style.displa
 function clearForm(){
   if(!confirm('Clear all project fields and partner entries?')) return;
   document.getElementById('fac-project').value='';
+  document.getElementById('fac-funder').value='';
+  document.getElementById('fac-budget').value='';
   document.getElementById('fac-start').value='';
   document.getElementById('fac-end').value='';
   document.getElementById('partner-entries').innerHTML='';
