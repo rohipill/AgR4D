@@ -1,9 +1,9 @@
-﻿﻿<!DOCTYPE html>
+?<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>AgR4D Partnership Assessment Tool — Partner Questionnaire</title>
+<title>AgR4D Partnership Assessment Tool - Partner Questionnaire</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -106,7 +106,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
     <div class="card">
       <h2 style="font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:.3rem">Your details</h2>
       <p style="font-size:13px;color:var(--text-muted);margin-bottom:1.25rem">Please complete all fields before continuing.</p>
-      <div id="loading-msg" class="alert alert-info" style="display:none">Loading your questionnaire link…</div>
+      <div id="loading-msg" class="alert alert-info" style="display:none">Loading your questionnaire link...</div>
       <div id="token-error" class="alert alert-error show" style="display:none"></div>
       <div class="field">
         <label class="field-label">Project title</label>
@@ -129,7 +129,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
       <div class="field">
         <label class="field-label">Stage to assess</label>
         <select id="r-stage" onchange="validateStageSelect()">
-          <option value="">"” select a stage "”</option>
+          <option value="">"� select a stage "�</option>
           <option value="0">Stage 1: Identification &amp; scoping</option>
           <option value="1">Stage 2: Research design &amp; planning</option>
           <option value="2">Stage 3: Data collection &amp; fieldwork</option>
@@ -141,7 +141,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
       </div>
       <div class="alert alert-error" id="err-details">Please fill in your name and select a stage to continue.</div>
       <div class="btn-row">
-        <button class="btn btn-primary" id="btn-start" onclick="startQuestionnaire()" disabled>Start questionnaire â†’</button>
+        <button class="btn btn-primary" id="btn-start" onclick="startQuestionnaire()" disabled>Start questionnaire →</button>
       </div>
     </div>
   </div>
@@ -162,8 +162,8 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
       <div class="response-options" id="resp-options"></div>
       <div class="alert alert-error" id="err-answer">Please select a response to continue.</div>
       <div class="q-nav">
-        <button class="q-nav-back" id="q-back-btn" onclick="goBack()">â† Back</button>
-        <button class="btn btn-primary" onclick="goNext()" id="q-next-btn">Next â†’</button>
+        <button class="q-nav-back" id="q-back-btn" onclick="goBack()">← Back</button>
+        <button class="btn btn-primary" onclick="goNext()" id="q-next-btn">Next →</button>
       </div>
     </div>
   </div>
@@ -171,11 +171,11 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
   <!-- STAGE COMPLETE -->
   <div id="screen-stage-complete" class="screen">
     <div class="card" style="text-align:center;padding:2rem 1.5rem">
-      <div class="circle-icon circle-green">âœ“</div>
+      <div class="circle-icon circle-green">✓</div>
       <h2 style="font-family:'DM Serif Display',serif;font-size:21px;margin-bottom:.5rem" id="stage-complete-title"></h2>
       <p style="font-size:14px;color:var(--text-muted);max-width:400px;margin:0 auto 1.5rem;line-height:1.6" id="stage-complete-msg"></p>
       <div class="btn-group" style="justify-content:center">
-        <button class="btn btn-primary" id="btn-next-stage" onclick="proceedNextStage()">Proceed to next stage â†’</button>
+        <button class="btn btn-primary" id="btn-next-stage" onclick="proceedNextStage()">Proceed to next stage →</button>
         <button class="btn" onclick="endSurvey()">End survey</button>
       </div>
     </div>
@@ -184,7 +184,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
   <!-- THANK YOU -->
   <div id="screen-thankyou" class="screen">
     <div class="card" style="text-align:center;padding:2rem 1.5rem">
-      <div class="circle-icon circle-blue">ðŸ¤</div>
+      <div class="circle-icon circle-blue">🤝</div>
       <h2 style="font-family:'DM Serif Display',serif;font-size:21px;margin-bottom:.5rem">Thank you for your responses</h2>
       <p style="font-size:14px;color:var(--text-muted);max-width:420px;margin:0 auto 1.25rem;line-height:1.6">Your inputs have been recorded and will contribute to the overall partnership health assessment.</p>
       <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-md);padding:1rem;max-width:380px;margin:0 auto;text-align:left">
@@ -196,7 +196,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 
 </div>
 <script>
-/* â”€â”€ Configuration â”€â”€ */
+/* ── Configuration ── */
 var API_BASE = ''; /* Set to your Vercel URL if HTML is hosted separately, e.g. 'https://myapp.vercel.app' */
 
 var STAGES=[
@@ -335,7 +335,7 @@ function renderQuestion(){
   document.getElementById('q-eyebrow').textContent = 'Question '+(pos+1)+' of '+total;
   document.getElementById('q-text').textContent = q.text;
   document.getElementById('err-answer').classList.remove('show');
-  document.getElementById('q-back-btn').textContent = pos===0 ? 'â† Back to details' : 'â† Previous question';
+  document.getElementById('q-back-btn').textContent = pos===0 ? '← Back to details' : '← Previous question';
   var container = document.getElementById('resp-options');
   container.innerHTML = '';
   var opts = ['Yes','No',"I don't know"];
@@ -355,7 +355,7 @@ function renderQuestion(){
   });
   var nextBtn = document.getElementById('q-next-btn');
   var isLast = pos === total-1;
-  nextBtn.textContent = isLast ? 'Submit stage âœ“' : 'Next â†’';
+  nextBtn.textContent = isLast ? 'Submit stage ✓' : 'Next →';
   nextBtn.disabled = isLast && session.answers[qIdx] === null;
 }
 
@@ -391,7 +391,7 @@ function goBack(){
 async function submitStage(){
   var nextBtn = document.getElementById('q-next-btn');
   nextBtn.disabled = true;
-  nextBtn.textContent = 'Saving…';
+  nextBtn.textContent = 'Saving�';
   try{
     var res = await fetch((API_BASE||'')+'/api/responses',{
       method:'POST',
@@ -408,7 +408,7 @@ async function submitStage(){
     if(!res.ok){
       alert('Error saving your responses: '+(data.error||'Unknown error')+'\n\nPlease try again.');
       nextBtn.disabled = false;
-      nextBtn.textContent = 'Submit stage âœ“';
+      nextBtn.textContent = 'Submit stage ✓';
       return;
     }
     if(session.completedStages.indexOf(session.currentStageIdx)===-1)
@@ -417,7 +417,7 @@ async function submitStage(){
   }catch(e){
     alert('Could not save your responses: '+e.message+'\n\nPlease check your connection and try again.');
     nextBtn.disabled = false;
-    nextBtn.textContent = 'Submit stage âœ“';
+    nextBtn.textContent = 'Submit stage ✓';
   }
 }
 
@@ -430,7 +430,7 @@ function showStageComplete(){
     : 'You have completed '+stage.name+'. Would you like to proceed to the next stage?';
   var nextBtn = document.getElementById('btn-next-stage');
   nextBtn.style.display = isLast ? 'none' : '';
-  if(!isLast) nextBtn.textContent = 'Proceed to '+STAGES[session.currentStageIdx+1].short+' â†’';
+  if(!isLast) nextBtn.textContent = 'Proceed to '+STAGES[session.currentStageIdx+1].short+' →';
   showScreen('screen-stage-complete');
 }
 

@@ -1,9 +1,9 @@
-﻿﻿<!DOCTYPE html>
+???<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>AgR4D Partnership Assessment Tool — Facilitator</title>
+<title>AgR4D Partnership Assessment Tool � Facilitator</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -151,12 +151,12 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
         <div class="field">
           <label class="field-label">Project start date</label>
           <input type="date" id="fac-start" onchange="validateDates()">
-          <div class="field-hint">mm/dd/yy "” or use the calendar</div>
+          <div class="field-hint">mm/dd/yy "� or use the calendar</div>
         </div>
         <div class="field">
           <label class="field-label">Project end date</label>
           <input type="date" id="fac-end" onchange="validateDates()">
-          <div class="field-hint">mm/dd/yy "” or use the calendar</div>
+          <div class="field-hint">mm/dd/yy "� or use the calendar</div>
           <div class="alert-error" id="err-end-date" style="margin-top:4px;font-size:12px;padding:.4rem .75rem">End date cannot be before the start date.</div>
         </div>
       </div>
@@ -216,7 +216,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 
 </div>
 <script>
-/* â”€â”€ Configuration â”€â”€ */
+/* ── Configuration ── */
 var API_BASE = ''; /* Set to your Vercel URL if HTML is hosted separately, e.g. 'https://myapp.vercel.app' */
 
 var STAGES=[
@@ -261,11 +261,11 @@ var INDICATORS=[
   "Partners indicating that relevant end-users were involved in shaping the scaling approach"
 ];
 
-/* â”€â”€ Facilitator key â”€â”€ */
+/* ── Facilitator key ── */
 function getFacKey(){ return localStorage.getItem('ar4d_fac_key')||''; }
 function saveFacKey(){
   var k=document.getElementById('fac-key-input').value.trim();
-  if(!k){ document.getElementById('key-status').textContent='âš  Please enter a key'; return; }
+  if(!k){ document.getElementById('key-status').textContent='⚠ Please enter a key'; return; }
   localStorage.setItem('ar4d_fac_key',k);
   setKeyBarSaved();
 }
@@ -273,11 +273,11 @@ function setKeyBarSaved(){
   var bar=document.getElementById('key-bar');
   bar.style.background='var(--green-bg)';
   bar.style.borderColor='var(--green-border)';
-  document.getElementById('key-status').textContent='âœ“ Key saved';
+  document.getElementById('key-status').textContent='✓ Key saved';
   document.getElementById('key-status').style.color='var(--green)';
 }
 
-/* â”€â”€ Project ID â”€â”€ */
+/* ── Project ID ── */
 function getProjectId(){
   var url=new URLSearchParams(window.location.search).get('project');
   return url||localStorage.getItem('ar4d_project_id')||'';
@@ -291,7 +291,7 @@ function setProjectId(id){
   }catch(e){}
 }
 
-/* â”€â”€ API helper â”€â”€ */
+/* ── API helper ── */
 async function apiFetch(path, options){
   options=options||{};
   var key=getFacKey();
@@ -304,7 +304,7 @@ async function apiFetch(path, options){
   return data;
 }
 
-/* â”€â”€ Tabs â”€â”€ */
+/* ── Tabs ── */
 function switchFTab(tab){
   ['setup','status','indicators'].forEach(function(t){
     document.getElementById('ftab-'+t).classList.toggle('active',t===tab);
@@ -314,7 +314,7 @@ function switchFTab(tab){
   if(tab==='status') renderStatus();
 }
 
-/* â”€â”€ Project setup â”€â”€ */
+/* ── Project setup ── */
 function onProjectChange(){ document.getElementById('links-output').style.display='none'; }
 
 function addPartnerEntry(){
@@ -346,7 +346,7 @@ function addPartnerEntry(){
   var removeBtn=document.createElement('button');
   removeBtn.type='button';
   removeBtn.className='remove-btn';
-  removeBtn.textContent='✕';
+  removeBtn.textContent='?';
   removeBtn.onclick=function(){removePartnerEntry(removeBtn);};
 
   div.appendChild(orgWrap);
@@ -374,7 +374,7 @@ async function generateLinks(){
   if(!validateDates()) return;
   var key=getFacKey();
   if(!key){
-    document.getElementById('key-status').textContent='âš  Set your access key above first';
+    document.getElementById('key-status').textContent='⚠ Set your access key above first';
     document.getElementById('fac-key-input').focus();
     return;
   }
@@ -392,7 +392,7 @@ async function generateLinks(){
   document.getElementById('err-api').classList.remove('show');
 
   var btn=document.getElementById('btn-generate');
-  btn.disabled=true; btn.textContent='Saving…';
+  btn.disabled=true; btn.textContent='Saving�';
   try{
     var data=await apiFetch('/api/projects',{
       method:'POST',
@@ -426,7 +426,7 @@ function displayLinks(project_id, partners, projectTitle){
     var email=p.email||'';
     var url=base+'?token='+encodeURIComponent(p.token);
     var eid='url-'+encodeURIComponent(orgName);
-    var subject=encodeURIComponent('agR4D Partnership Check-in "” '+projectTitle);
+    var subject=encodeURIComponent('agR4D Partnership Check-in "� '+projectTitle);
     var bodyText='Dear '+orgName+',\n\nYou are invited to complete the agR4D Partnership Check-in questionnaire for the project: '+projectTitle+'.\n\nPlease use the following link to access your personalised questionnaire:\n'+url+'\n\nThank you for your participation.\n\nBest regards';
     var mailtoHref=email
       ?'mailto:'+email+'?subject='+subject+'&body='+encodeURIComponent(bodyText)
@@ -466,7 +466,7 @@ function displayLinks(project_id, partners, projectTitle){
     emailA.className='email-btn';
     emailA.href=mailtoHref;
     emailA.target='_blank';
-    emailA.textContent='✉ Open in email client';
+    emailA.textContent='? Open in email client';
     actionsDiv.appendChild(emailA);
 
     div.appendChild(actionsDiv);
@@ -479,17 +479,17 @@ function copyLink(eid,btn){
   var el=document.getElementById(eid);
   if(!el) return;
   navigator.clipboard.writeText(el.textContent).then(function(){
-    btn.textContent='Copied âœ“';btn.classList.add('copied');
+    btn.textContent='Copied ✓';btn.classList.add('copied');
     setTimeout(function(){btn.textContent='Copy link';btn.classList.remove('copied');},2000);
   }).catch(function(){
     var ta=document.createElement('textarea');ta.value=el.textContent;
     document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
-    btn.textContent='Copied âœ“';btn.classList.add('copied');
+    btn.textContent='Copied ✓';btn.classList.add('copied');
     setTimeout(function(){btn.textContent='Copy link';btn.classList.remove('copied');},2000);
   });
 }
 
-/* â”€â”€ Response status â”€â”€ */
+/* ── Response status ── */
 async function renderStatus(){
   var container=document.getElementById('status-content');
   var project_id=getProjectId();
@@ -497,7 +497,7 @@ async function renderStatus(){
     container.innerHTML='<p style="font-size:13px;color:var(--text-muted)">No project set up yet. Go to Project setup to add your project and partners.</p>';
     return;
   }
-  container.innerHTML='<p style="font-size:13px;color:var(--text-muted)">Loading…</p>';
+  container.innerHTML='<p style="font-size:13px;color:var(--text-muted)">Loading�</p>';
   try{
     var data=await apiFetch('/api/status/'+project_id);
     var stageHeaders=STAGES.map(function(s){return '<th>'+s.short+'</th>';}).join('');
@@ -505,7 +505,7 @@ async function renderStatus(){
     data.status.forEach(function(p){
       var cells=STAGES.map(function(stage,si){
         return p.completed_stages.indexOf(si)>-1
-          ?'<td><span class="badge-done">âœ“ Done</span></td>'
+          ?'<td><span class="badge-done">✓ Done</span></td>'
           :'<td><span class="badge-pending">Pending</span></td>';
       }).join('');
       rows+='<tr><td>'+p.organisation_name+(p.email?'<br><span style="font-size:11px;color:var(--text-hint);font-weight:400">'+p.email+'</span>':'')+'</td>'+cells+'</tr>';
@@ -522,7 +522,7 @@ async function renderStatus(){
   }
 }
 
-/* â”€â”€ Indicators â”€â”€ */
+/* ── Indicators ── */
 var _dashResponses=[];
 
 function getStageForQ(qIdx){
@@ -552,7 +552,7 @@ async function renderDashboard(){
     emptyEl.textContent='No project set up yet. Indicators will appear once partners complete the questionnaire.';
     emptyEl.style.display='block';bodyEl.style.display='none';return;
   }
-  emptyEl.textContent='Loading…';
+  emptyEl.textContent='Loading�';
   emptyEl.style.display='block';bodyEl.style.display='none';
   try{
     var data=await apiFetch('/api/responses/'+project_id);
@@ -575,7 +575,7 @@ async function renderDashboard(){
       stageDiv.className='stage-block';
       var hdr=document.createElement('div');
       hdr.className='stage-block-header';
-      hdr.textContent=stage.short+' "” '+stage.name;
+      hdr.textContent=stage.short+' "� '+stage.name;
       stageDiv.appendChild(hdr);
       stage.qs.forEach(function(qIdx){
         var result=computeIndicator(qIdx);
@@ -589,7 +589,7 @@ async function renderDashboard(){
           result.responses.forEach(function(r){
             var aLabel=r.answer==='yes'?'Yes':r.answer==='no'?'No':r.answer==='idk'?"I don't know":'Not Relevant';
             var aCls=r.answer==='yes'?'answer-yes':r.answer==='no'?'answer-no':r.answer==='idk'?'answer-idk':'answer-nr';
-            panelHTML+='<tr><td>'+(r.respondent.name||'"”')+'</td><td>'+(r.respondent.org||'"”')+'</td><td class="'+aCls+'">'+aLabel+'</td></tr>';
+            panelHTML+='<tr><td>'+(r.respondent.name||'"�')+'</td><td>'+(r.respondent.org||'"�')+'</td><td class="'+aCls+'">'+aLabel+'</td></tr>';
           });
           panelHTML+='</tbody></table>';
         }else{
@@ -606,7 +606,7 @@ async function renderDashboard(){
         dot.className='ind-colour-dot '+dotClass;
         var chev=document.createElement('span');
         chev.className='ind-chevron';
-        chev.textContent='▾';
+        chev.textContent='?';
         indHdr.appendChild(stmt);
         indHdr.appendChild(dot);
         indHdr.appendChild(chev);
@@ -630,7 +630,7 @@ async function renderDashboard(){
   }
 }
 
-/* â”€â”€ On load â”€â”€ */
+/* ── On load ── */
 window.addEventListener('DOMContentLoaded',async function(){
   var k=getFacKey();
   if(k){
