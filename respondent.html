@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>agR4D Check-in â€” Partner Questionnaire</title>
+<title>AgR4D Partnership Assessment Tool — Partner Questionnaire</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -106,7 +106,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
     <div class="card">
       <h2 style="font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:.3rem">Your details</h2>
       <p style="font-size:13px;color:var(--text-muted);margin-bottom:1.25rem">Please complete all fields before continuing.</p>
-      <div id="loading-msg" class="alert alert-info" style="display:none">Loading your questionnaire linkâ€¦</div>
+      <div id="loading-msg" class="alert alert-info" style="display:none">Loading your questionnaire link…</div>
       <div id="token-error" class="alert alert-error show" style="display:none"></div>
       <div class="field">
         <label class="field-label">Project title</label>
@@ -129,7 +129,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
       <div class="field">
         <label class="field-label">Stage to assess</label>
         <select id="r-stage" onchange="validateStageSelect()">
-          <option value="">â€” select a stage â€”</option>
+          <option value="">"” select a stage "”</option>
           <option value="0">Stage 1: Identification &amp; scoping</option>
           <option value="1">Stage 2: Research design &amp; planning</option>
           <option value="2">Stage 3: Data collection &amp; fieldwork</option>
@@ -391,7 +391,7 @@ function goBack(){
 async function submitStage(){
   var nextBtn = document.getElementById('q-next-btn');
   nextBtn.disabled = true;
-  nextBtn.textContent = 'Savingâ€¦';
+  nextBtn.textContent = 'Saving…';
   try{
     var res = await fetch((API_BASE||'')+'/api/responses',{
       method:'POST',

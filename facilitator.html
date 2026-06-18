@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>agR4D Check-in â€” Facilitator</title>
+<title>AgR4D Partnership Assessment Tool — Facilitator</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -151,12 +151,12 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
         <div class="field">
           <label class="field-label">Project start date</label>
           <input type="date" id="fac-start" onchange="validateDates()">
-          <div class="field-hint">mm/dd/yy â€” or use the calendar</div>
+          <div class="field-hint">mm/dd/yy "” or use the calendar</div>
         </div>
         <div class="field">
           <label class="field-label">Project end date</label>
           <input type="date" id="fac-end" onchange="validateDates()">
-          <div class="field-hint">mm/dd/yy â€” or use the calendar</div>
+          <div class="field-hint">mm/dd/yy "” or use the calendar</div>
           <div class="alert-error" id="err-end-date" style="margin-top:4px;font-size:12px;padding:.4rem .75rem">End date cannot be before the start date.</div>
         </div>
       </div>
@@ -232,7 +232,7 @@ var INDICATORS=[
   "Partners confirming they received project information in a timely manner and through accessible communication channels",
   "Partners confirming they could communicate freely and directly with other project partners",
   "Partners confirming their national or institutional realities were considered during scoping",
-  "Partners confirming their expectations and concerns contributed to shaping the projectâ€™s scope",
+  "Partners confirming their expectations and concerns contributed to shaping the project's scope",
   "Partners confirming they could influence the research questions, design, or methods",
   "Partners confirming their role in the project allowed them to contribute appropriately",
   "Partners confirming authorship or recognition arrangements were discussed early with their organisation",
@@ -254,7 +254,7 @@ var INDICATORS=[
   "Partners confirming their organisation was properly credited in communication outputs",
   "Partners confirming the findings were presented in forums their organisation could access or join",
   "Partners confirming they were involved in reviewing the partnership",
-  "Partners confirming the partnership strengthened their organisationâ€™s capacity or learning",
+  "Partners confirming the partnership strengthened their organisation's capacity or learning",
   "Partners confirming benefit-sharing and other agreed commitments to their organisation were fulfilled",
   "Partners confirming they were involved in discussions on how findings would be taken forward or scaled",
   "Partners indicating that relevant local partners were involved in shaping the scaling approach",
@@ -346,7 +346,7 @@ function addPartnerEntry(){
   var removeBtn=document.createElement('button');
   removeBtn.type='button';
   removeBtn.className='remove-btn';
-  removeBtn.textContent='âœ•';
+  removeBtn.textContent='✕';
   removeBtn.onclick=function(){removePartnerEntry(removeBtn);};
 
   div.appendChild(orgWrap);
@@ -392,7 +392,7 @@ async function generateLinks(){
   document.getElementById('err-api').classList.remove('show');
 
   var btn=document.getElementById('btn-generate');
-  btn.disabled=true; btn.textContent='Savingâ€¦';
+  btn.disabled=true; btn.textContent='Saving…';
   try{
     var data=await apiFetch('/api/projects',{
       method:'POST',
@@ -426,7 +426,7 @@ function displayLinks(project_id, partners, projectTitle){
     var email=p.email||'';
     var url=base+'?token='+encodeURIComponent(p.token);
     var eid='url-'+encodeURIComponent(orgName);
-    var subject=encodeURIComponent('agR4D Partnership Check-in â€” '+projectTitle);
+    var subject=encodeURIComponent('agR4D Partnership Check-in "” '+projectTitle);
     var bodyText='Dear '+orgName+',\n\nYou are invited to complete the agR4D Partnership Check-in questionnaire for the project: '+projectTitle+'.\n\nPlease use the following link to access your personalised questionnaire:\n'+url+'\n\nThank you for your participation.\n\nBest regards';
     var mailtoHref=email
       ?'mailto:'+email+'?subject='+subject+'&body='+encodeURIComponent(bodyText)
@@ -466,7 +466,7 @@ function displayLinks(project_id, partners, projectTitle){
     emailA.className='email-btn';
     emailA.href=mailtoHref;
     emailA.target='_blank';
-    emailA.textContent='âœ‰ Open in email client';
+    emailA.textContent='✉ Open in email client';
     actionsDiv.appendChild(emailA);
 
     div.appendChild(actionsDiv);
@@ -497,7 +497,7 @@ async function renderStatus(){
     container.innerHTML='<p style="font-size:13px;color:var(--text-muted)">No project set up yet. Go to Project setup to add your project and partners.</p>';
     return;
   }
-  container.innerHTML='<p style="font-size:13px;color:var(--text-muted)">Loadingâ€¦</p>';
+  container.innerHTML='<p style="font-size:13px;color:var(--text-muted)">Loading…</p>';
   try{
     var data=await apiFetch('/api/status/'+project_id);
     var stageHeaders=STAGES.map(function(s){return '<th>'+s.short+'</th>';}).join('');
@@ -552,7 +552,7 @@ async function renderDashboard(){
     emptyEl.textContent='No project set up yet. Indicators will appear once partners complete the questionnaire.';
     emptyEl.style.display='block';bodyEl.style.display='none';return;
   }
-  emptyEl.textContent='Loadingâ€¦';
+  emptyEl.textContent='Loading…';
   emptyEl.style.display='block';bodyEl.style.display='none';
   try{
     var data=await apiFetch('/api/responses/'+project_id);
@@ -575,7 +575,7 @@ async function renderDashboard(){
       stageDiv.className='stage-block';
       var hdr=document.createElement('div');
       hdr.className='stage-block-header';
-      hdr.textContent=stage.short+' â€” '+stage.name;
+      hdr.textContent=stage.short+' "” '+stage.name;
       stageDiv.appendChild(hdr);
       stage.qs.forEach(function(qIdx){
         var result=computeIndicator(qIdx);
@@ -589,7 +589,7 @@ async function renderDashboard(){
           result.responses.forEach(function(r){
             var aLabel=r.answer==='yes'?'Yes':r.answer==='no'?'No':r.answer==='idk'?"I don't know":'Not Relevant';
             var aCls=r.answer==='yes'?'answer-yes':r.answer==='no'?'answer-no':r.answer==='idk'?'answer-idk':'answer-nr';
-            panelHTML+='<tr><td>'+(r.respondent.name||'â€”')+'</td><td>'+(r.respondent.org||'â€”')+'</td><td class="'+aCls+'">'+aLabel+'</td></tr>';
+            panelHTML+='<tr><td>'+(r.respondent.name||'"”')+'</td><td>'+(r.respondent.org||'"”')+'</td><td class="'+aCls+'">'+aLabel+'</td></tr>';
           });
           panelHTML+='</tbody></table>';
         }else{
@@ -606,7 +606,7 @@ async function renderDashboard(){
         dot.className='ind-colour-dot '+dotClass;
         var chev=document.createElement('span');
         chev.className='ind-chevron';
-        chev.textContent='â–¾';
+        chev.textContent='▾';
         indHdr.appendChild(stmt);
         indHdr.appendChild(dot);
         indHdr.appendChild(chev);
