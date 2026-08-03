@@ -6,10 +6,9 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const auth = req.headers.authorization;
-  if (!auth || auth !== `Bearer ${process.env.FACILITATOR_SECRET}`) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
+  const key = req.headers.authorization?.startsWith('Bearer ')
+    ? req.headers.authorization.slice(7).trim() : '';
+  if (!key) return res.status(401).json({ error: 'Unauthorized' });
 
   try {
     const { project_id, partners } = req.body;

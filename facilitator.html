@@ -107,8 +107,9 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 .answer-unsat{color:var(--red);font-weight:500}
 .answer-nr{color:var(--text-hint)}
 .note-text{font-size:12px;color:var(--text-hint);font-style:italic;margin-top:2px}
-.reopen-btn{font-size:11px;padding:3px 10px;border:1px solid var(--amber-border);border-radius:var(--radius-sm);background:var(--amber-bg);color:var(--amber);cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;min-height:28px}
-.reopen-btn:hover{opacity:.85}
+.reassign-btn{width:28px;height:28px;border:1px solid var(--border);border-radius:50%;background:var(--surface);color:var(--text-hint);cursor:pointer;font-size:14px;display:inline-flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;position:relative}
+.reassign-btn:hover{border-color:var(--amber-border);color:var(--amber);background:var(--amber-bg)}
+.reassign-btn[title]:hover::after{content:attr(title);position:absolute;bottom:calc(100% + 5px);left:50%;transform:translateX(-50%);background:var(--text);color:#fff;font-size:11px;padding:3px 8px;border-radius:4px;white-space:nowrap;pointer-events:none;font-family:'DM Sans',sans-serif}
 .actions-section{margin-top:.85rem;padding-top:.85rem;border-top:1px solid var(--border)}
 .actions-label{font-size:11px;font-weight:500;color:var(--text-muted);margin-bottom:.3rem;letter-spacing:.02em}
 .actions-input{font-size:13px;min-height:64px;resize:vertical;padding:8px 10px;line-height:1.5}
@@ -123,6 +124,15 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 .stage-toggle input[type=checkbox]{width:16px;height:16px;cursor:pointer;flex-shrink:0;accent-color:var(--green)}
 .stage-toggle-label{font-size:13px;color:var(--text-muted)}
 .stage-toggle.on .stage-toggle-label{color:var(--text)}
+/* Project list */
+.proj-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.1rem 1.25rem;margin-bottom:.75rem;box-shadow:var(--shadow);display:flex;align-items:center;gap:1rem;cursor:pointer;transition:border-color .15s;-webkit-tap-highlight-color:transparent}
+.proj-card:hover{border-color:var(--border-strong)}
+.proj-card-body{flex:1;min-width:0}
+.proj-card-title{font-size:15px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.proj-card-meta{font-size:12px;color:var(--text-hint);margin-top:2px}
+.proj-card-arrow{font-size:18px;color:var(--border-strong);flex-shrink:0}
+.back-link{display:inline-flex;align-items:center;gap:5px;font-size:13px;color:var(--text-muted);cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;padding:0;margin-bottom:1.25rem;-webkit-tap-highlight-color:transparent}
+.back-link:hover{color:var(--text)}
 </style>
 </head>
 <body>
@@ -133,103 +143,117 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
     <div class="app-title">Partnership Assessment Tool</div>
   </div>
 
-  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:1rem">
-    <div style="font-family:'DM Serif Display',serif;font-size:22px">Facilitator module</div>
-  </div>
-
   <!-- FACILITATOR KEY BAR -->
-  <div id="key-bar" style="background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:var(--radius-sm);padding:.6rem 1rem;font-size:13px;margin-bottom:1.25rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+  <div id="key-bar" style="border-radius:var(--radius-sm);padding:.6rem 1rem;font-size:13px;margin-bottom:1.25rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;border:1px solid var(--amber-border);background:var(--amber-bg)">
     <span style="color:var(--amber);font-weight:500;white-space:nowrap">Facilitator key:</span>
-    <input type="password" id="fac-key-input" placeholder="Enter your access key" style="flex:1;min-width:180px;max-width:280px;font-size:13px;padding:5px 10px;border:1px solid var(--amber-border);border-radius:var(--radius-sm);background:var(--surface);font-family:'DM Sans',sans-serif">
-    <button onclick="saveFacKey()" class="btn btn-sm" style="background:var(--amber);border-color:var(--amber);color:#fff;flex-shrink:0">Save key</button>
+    <input type="password" id="fac-key-input" placeholder="Enter your access key" style="flex:1;min-width:180px;max-width:280px;font-size:13px;padding:5px 10px;border:1px solid var(--amber-border);border-radius:var(--radius-sm);background:var(--surface);font-family:'DM Sans',sans-serif" onkeydown="if(event.key==='Enter') saveFacKey()">
+    <button onclick="saveFacKey()" class="btn btn-sm" style="background:var(--amber);border-color:var(--amber);color:#fff;flex-shrink:0">Access</button>
     <span id="key-status" style="font-size:12px;color:var(--text-muted)"></span>
   </div>
 
-  <div class="tab-row">
-    <div class="tab active" id="ftab-setup" onclick="switchFTab('setup')">Project setup</div>
-    <div class="tab" id="ftab-status" onclick="switchFTab('status')">Response status</div>
-    <div class="tab" id="ftab-indicators" onclick="switchFTab('indicators')">Indicators</div>
+  <!-- PANEL: Project list -->
+  <div id="panel-projects">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:1.25rem">
+      <div style="font-family:'DM Serif Display',serif;font-size:22px">My projects</div>
+      <button class="btn btn-sm btn-primary" onclick="startNewProject()">+ New project</button>
+    </div>
+    <div id="proj-loading" class="alert alert-info" style="display:none">Loading your projects&hellip;</div>
+    <div id="proj-no-key" style="font-size:13px;color:var(--text-muted);padding:.5rem 0">Enter your facilitator key above to see your projects.</div>
+    <div id="proj-empty" style="display:none;font-size:13px;color:var(--text-muted);padding:.5rem 0">No projects yet. Click <strong>New project</strong> to get started.</div>
+    <div id="proj-error" class="alert alert-error"></div>
+    <div id="proj-list"></div>
   </div>
 
-  <!-- PROJECT SETUP -->
-  <div id="fpanel-setup">
-    <div class="card">
-      <h3 style="font-size:16px;font-weight:500;margin-bottom:1rem">Project details</h3>
-      <div class="field">
-        <label class="field-label">Project title</label>
-        <input type="text" id="fac-project" oninput="onProjectChange()">
-      </div>
-      <div class="two-col">
-        <div class="field">
-          <label class="field-label">Project start date</label>
-          <input type="date" id="fac-start" onchange="validateDates()">
-          <div class="field-hint">mm/dd/yy &mdash; or use the calendar</div>
-        </div>
-        <div class="field">
-          <label class="field-label">Project end date</label>
-          <input type="date" id="fac-end" onchange="validateDates()">
-          <div class="field-hint">mm/dd/yy &mdash; or use the calendar</div>
-          <div class="alert-error" id="err-end-date" style="margin-top:4px;font-size:12px;padding:.4rem .75rem">End date cannot be before the start date.</div>
-        </div>
-      </div>
-      <div class="two-col">
-        <div class="field">
-          <label class="field-label">Project funder</label>
-          <input type="text" id="fac-funder">
-        </div>
-        <div class="field">
-          <label class="field-label">Budget (USD)</label>
-          <input type="text" id="fac-budget">
-        </div>
-      </div>
+  <!-- PANEL: Project detail -->
+  <div id="panel-detail" style="display:none">
+    <button class="back-link" onclick="showProjectList()">&#8592; My projects</button>
+
+    <div class="tab-row">
+      <div class="tab active" id="ftab-setup" onclick="switchFTab('setup')">Project setup</div>
+      <div class="tab" id="ftab-status" onclick="switchFTab('status')">Response status</div>
+      <div class="tab" id="ftab-indicators" onclick="switchFTab('indicators')">Indicators</div>
     </div>
 
-    <div class="card" style="margin-top:1rem">
-      <h3 style="font-size:16px;font-weight:500;margin-bottom:.25rem">Stage access</h3>
-      <p style="font-size:13px;color:var(--text-muted);margin-bottom:.75rem">Select which stages are open for respondents. Respondents can only access stages you enable here.</p>
-      <div class="stage-toggle-grid" id="stage-toggles"></div>
-    </div>
-
-    <div class="card" style="margin-top:1rem">
-      <h3 style="font-size:16px;font-weight:500;margin-bottom:.25rem">Partner organisations</h3>
-      <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem">Add each partner organisation and their email address. A unique respondent link will be generated for each.</p>
-      <div id="partner-entries"></div>
-      <button class="btn btn-sm" onclick="addPartnerEntry()" style="margin-top:.25rem">+ Add partner</button>
-      <div class="alert-error" id="err-partners" style="margin-top:.75rem">Please enter a project title and at least one partner organisation.</div>
-      <div class="alert-error" id="err-api" style="margin-top:.75rem"></div>
-      <div class="btn-row">
-        <button class="btn btn-primary" id="btn-generate" onclick="generateLinks()">Save project &amp; generate links</button>
-        <button class="btn btn-sm" onclick="clearForm()" style="color:var(--text-muted)">Clear form</button>
-      </div>
-    </div>
-
-    <div id="links-output" style="display:none;margin-top:1rem">
+    <!-- PROJECT SETUP -->
+    <div id="fpanel-setup">
       <div class="card">
-        <h3 style="font-size:16px;font-weight:500;margin-bottom:.25rem">Respondent links</h3>
-        <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem">Copy each link or open directly in your email client. Each link is unique to that partner.</p>
-        <div id="links-list"></div>
+        <h3 style="font-size:16px;font-weight:500;margin-bottom:1rem">Project details</h3>
+        <div class="field">
+          <label class="field-label">Project title</label>
+          <input type="text" id="fac-project" oninput="onProjectChange()">
+        </div>
+        <div class="two-col">
+          <div class="field">
+            <label class="field-label">Project start date</label>
+            <input type="date" id="fac-start" onchange="validateDates()">
+            <div class="field-hint">mm/dd/yy &mdash; or use the calendar</div>
+          </div>
+          <div class="field">
+            <label class="field-label">Project end date</label>
+            <input type="date" id="fac-end" onchange="validateDates()">
+            <div class="field-hint">mm/dd/yy &mdash; or use the calendar</div>
+            <div class="alert-error" id="err-end-date" style="margin-top:4px;font-size:12px;padding:.4rem .75rem">End date cannot be before the start date.</div>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="field">
+            <label class="field-label">Project funder</label>
+            <input type="text" id="fac-funder">
+          </div>
+          <div class="field">
+            <label class="field-label">Budget (USD)</label>
+            <input type="text" id="fac-budget">
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:1rem">
+        <h3 style="font-size:16px;font-weight:500;margin-bottom:.25rem">Stage access</h3>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:.75rem">Select which stages are open for respondents.</p>
+        <div class="stage-toggle-grid" id="stage-toggles"></div>
+      </div>
+
+      <div class="card" style="margin-top:1rem">
+        <h3 style="font-size:16px;font-weight:500;margin-bottom:.25rem">Partner organisations</h3>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem">Add each partner organisation and their email address. A unique respondent link will be generated for each.</p>
+        <div id="partner-entries"></div>
+        <button class="btn btn-sm" onclick="addPartnerEntry()" style="margin-top:.25rem">+ Add partner</button>
+        <div class="alert-error" id="err-partners" style="margin-top:.75rem">Please enter a project title and at least one partner organisation.</div>
+        <div class="alert-error" id="err-api" style="margin-top:.75rem"></div>
+        <div class="btn-row">
+          <button class="btn btn-primary" id="btn-generate" onclick="generateLinks()">Save project &amp; generate links</button>
+          <button class="btn btn-sm" onclick="clearForm()" style="color:var(--text-muted)">Clear form</button>
+        </div>
+      </div>
+
+      <div id="links-output" style="display:none;margin-top:1rem">
+        <div class="card">
+          <h3 style="font-size:16px;font-weight:500;margin-bottom:.25rem">Respondent links</h3>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem">Copy each link or open directly in your email client.</p>
+          <div id="links-list"></div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- RESPONSE STATUS -->
-  <div id="fpanel-status" style="display:none">
-    <div class="card">
-      <h3 style="font-size:16px;font-weight:500;margin-bottom:.35rem">Partner response status</h3>
-      <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem">Shows which partners have submitted responses for each stage.</p>
-      <div id="status-content"></div>
-    </div>
-  </div>
-
-  <!-- INDICATORS -->
-  <div id="fpanel-indicators" style="display:none">
-    <div id="dash-empty" class="alert alert-info">No responses have been submitted yet. Indicators will appear here once partners complete the questionnaire.</div>
-    <div id="dash-body" style="display:none">
-      <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.25rem;font-size:13px;color:var(--text-muted)">
-        <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block"></span>All responses satisfactory (options 1-2)</span>
-        <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:var(--red);display:inline-block"></span>One or more responses need attention (options 3-5)</span>
+    <!-- RESPONSE STATUS -->
+    <div id="fpanel-status" style="display:none">
+      <div class="card">
+        <h3 style="font-size:16px;font-weight:500;margin-bottom:.35rem">Partner response status</h3>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem">Shows which partners have submitted responses for each stage.</p>
+        <div id="status-content"></div>
       </div>
-      <div id="dash-indicators"></div>
+    </div>
+
+    <!-- INDICATORS -->
+    <div id="fpanel-indicators" style="display:none">
+      <div id="dash-empty" class="alert alert-info">No responses yet. Indicators will appear here once partners complete the questionnaire.</div>
+      <div id="dash-body" style="display:none">
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.25rem;font-size:13px;color:var(--text-muted)">
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block"></span>All responses satisfactory (options 1&ndash;2)</span>
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:var(--red);display:inline-block"></span>One or more responses need attention (options 3&ndash;5)</span>
+        </div>
+        <div id="dash-indicators"></div>
+      </div>
     </div>
   </div>
 
@@ -314,12 +338,15 @@ var INDICATORS=[
 
 /* ── Facilitator key ── */
 function getFacKey(){ return localStorage.getItem('ar4d_fac_key')||''; }
+
 function saveFacKey(){
   var k=document.getElementById('fac-key-input').value.trim();
   if(!k){ document.getElementById('key-status').textContent='Please enter a key'; return; }
   localStorage.setItem('ar4d_fac_key',k);
   setKeyBarSaved();
+  showProjectList();
 }
+
 function setKeyBarSaved(){
   var bar=document.getElementById('key-bar');
   bar.style.background='var(--green-bg)';
@@ -330,16 +357,11 @@ function setKeyBarSaved(){
 
 /* ── Project ID ── */
 function getProjectId(){
-  var url=new URLSearchParams(window.location.search).get('project');
-  return url||localStorage.getItem('ar4d_project_id')||'';
+  return localStorage.getItem('ar4d_project_id')||'';
 }
 function setProjectId(id){
-  localStorage.setItem('ar4d_project_id',id);
-  try{
-    var u=new URL(window.location.href);
-    u.searchParams.set('project',id);
-    history.replaceState(null,'',u.toString());
-  }catch(e){}
+  if(id) localStorage.setItem('ar4d_project_id',id);
+  else localStorage.removeItem('ar4d_project_id');
 }
 
 /* ── API helper ── */
@@ -351,6 +373,117 @@ async function apiFetch(path, options){
   var data=await res.json();
   if(!res.ok) throw new Error(data.error||'API error '+res.status);
   return data;
+}
+
+/* ── Panel switching ── */
+function showProjectList(){
+  document.getElementById('panel-projects').style.display='';
+  document.getElementById('panel-detail').style.display='none';
+  var key=getFacKey();
+  if(!key){
+    document.getElementById('proj-no-key').style.display='';
+    document.getElementById('proj-loading').style.display='none';
+    document.getElementById('proj-list').innerHTML='';
+    document.getElementById('proj-empty').style.display='none';
+    return;
+  }
+  document.getElementById('proj-no-key').style.display='none';
+  loadProjectList();
+}
+
+async function loadProjectList(){
+  var loadEl=document.getElementById('proj-loading');
+  var emptyEl=document.getElementById('proj-empty');
+  var listEl=document.getElementById('proj-list');
+  var errEl=document.getElementById('proj-error');
+  loadEl.style.display='block';
+  listEl.innerHTML='';
+  emptyEl.style.display='none';
+  errEl.classList.remove('show');
+  try{
+    var data=await apiFetch('/api/projects');
+    loadEl.style.display='none';
+    if(!data.projects||!data.projects.length){
+      emptyEl.style.display='block';
+      return;
+    }
+    data.projects.forEach(function(p){
+      var card=document.createElement('div');
+      card.className='proj-card';
+      var meta=[];
+      if(p.start_date) meta.push(formatDate(p.start_date));
+      if(p.end_date) meta.push(formatDate(p.end_date));
+      if(p.funder) meta.push(p.funder);
+      card.innerHTML=
+        '<div class="proj-card-body">'+
+          '<div class="proj-card-title">'+escHtml(p.title)+'</div>'+
+          (meta.length?'<div class="proj-card-meta">'+escHtml(meta.join(' &mdash; '))+'</div>':'')+
+        '</div>'+
+        '<span class="proj-card-arrow">&#8250;</span>';
+      card.onclick=(function(pid){return function(){openProject(pid);};})(p.project_id);
+      listEl.appendChild(card);
+    });
+  }catch(e){
+    loadEl.style.display='none';
+    errEl.textContent='Could not load projects: '+e.message;
+    errEl.classList.add('show');
+  }
+}
+
+function openProject(project_id){
+  setProjectId(project_id);
+  document.getElementById('panel-projects').style.display='none';
+  document.getElementById('panel-detail').style.display='';
+  resetDetailPanel();
+  loadProject(project_id);
+  switchFTab('indicators');
+}
+
+function startNewProject(){
+  setProjectId('');
+  document.getElementById('panel-projects').style.display='none';
+  document.getElementById('panel-detail').style.display='';
+  resetDetailPanel();
+  switchFTab('setup');
+}
+
+function resetDetailPanel(){
+  document.getElementById('fac-project').value='';
+  document.getElementById('fac-funder').value='';
+  document.getElementById('fac-budget').value='';
+  document.getElementById('fac-start').value='';
+  document.getElementById('fac-end').value='';
+  document.getElementById('partner-entries').innerHTML='';
+  document.getElementById('links-output').style.display='none';
+  document.getElementById('links-list').innerHTML='';
+  document.getElementById('err-partners').classList.remove('show');
+  document.getElementById('status-content').innerHTML='';
+  document.getElementById('dash-indicators').innerHTML='';
+  document.getElementById('dash-empty').style.display='block';
+  document.getElementById('dash-body').style.display='none';
+  _dashResponses=[];
+  buildStageToggles();
+  addPartnerEntry();
+}
+
+async function loadProject(project_id){
+  try{
+    var data=await fetch((API_BASE||'')+'/api/projects/'+project_id).then(function(r){return r.json();});
+    if(!data.error){
+      document.getElementById('fac-project').value=data.title||'';
+      document.getElementById('fac-start').value=data.start_date||'';
+      document.getElementById('fac-end').value=data.end_date||'';
+      document.getElementById('fac-funder').value=data.funder||'';
+      document.getElementById('fac-budget').value=data.budget_usd||'';
+      if(data.partners&&data.partners.length){
+        document.getElementById('partner-entries').innerHTML='';
+        data.partners.forEach(function(p){
+          addPartnerEntry(p.organisation_name||'', p.email||'', p.token||'');
+        });
+        displayLinks(project_id, data.partners, data.title||'');
+      }
+    }
+  }catch(e){console.warn('Could not load project:',e.message);}
 }
 
 /* ── Tabs ── */
@@ -394,20 +527,9 @@ function getOpenStages(){
 function onProjectChange(){ document.getElementById('links-output').style.display='none'; }
 
 function clearForm(){
-  if(!confirm('Clear all project fields and partner entries?')) return;
-  document.getElementById('fac-project').value='';
-  document.getElementById('fac-funder').value='';
-  document.getElementById('fac-budget').value='';
-  document.getElementById('fac-start').value='';
-  document.getElementById('fac-end').value='';
-  document.getElementById('partner-entries').innerHTML='';
-  document.getElementById('links-output').style.display='none';
-  document.getElementById('links-list').innerHTML='';
-  document.getElementById('err-partners').classList.remove('show');
-  localStorage.removeItem('ar4d_project_id');
-  history.replaceState(null,'',location.pathname);
-  buildStageToggles();
-  addPartnerEntry();
+  if(!confirm('Clear all project fields and start a new project?')) return;
+  setProjectId('');
+  resetDetailPanel();
 }
 
 function addPartnerEntry(org, email, token){
@@ -470,7 +592,7 @@ async function generateLinks(){
   if(!validateDates()) return;
   var key=getFacKey();
   if(!key){
-    document.getElementById('key-status').textContent='Set your access key above first';
+    document.getElementById('key-status').textContent='Enter your facilitator key above first';
     document.getElementById('fac-key-input').focus();
     return;
   }
@@ -488,19 +610,14 @@ async function generateLinks(){
 
   try{
     if(existingProjectId){
-      /* Existing project — only create NEW partners (rows without a stored token) */
-      var existingPartners=[];
-      var newPartnerDefs=[];
+      var existingPartners=[],newPartnerDefs=[];
       entries.forEach(function(row){
         var org=row.querySelector('.pe-org').value.trim();
         var email=row.querySelector('.pe-email').value.trim();
         var token=row.getAttribute('data-partner-token');
         if(!org) return;
-        if(token){
-          existingPartners.push({organisation_name:org,email:email,token:token});
-        } else {
-          newPartnerDefs.push({org:org,email:email,_row:row});
-        }
+        if(token) existingPartners.push({organisation_name:org,email:email,token:token});
+        else newPartnerDefs.push({org:org,email:email,_row:row});
       });
       if(!existingPartners.length&&!newPartnerDefs.length){errP.classList.add('show');return;}
       var allPartners=existingPartners.slice();
@@ -516,8 +633,7 @@ async function generateLinks(){
         allPartners=allPartners.concat(newData.partners);
       }
       displayLinks(existingProjectId,allPartners,project);
-    } else {
-      /* New project */
+    }else{
       var partners=[];
       entries.forEach(function(row){
         var org=row.querySelector('.pe-org').value.trim();
@@ -570,41 +686,34 @@ function displayLinks(project_id, partners, projectTitle){
 
     var div=document.createElement('div');
     div.className='link-block';
-
     var orgDiv=document.createElement('div');
     orgDiv.className='link-org';
     orgDiv.textContent=orgName;
     div.appendChild(orgDiv);
-
     if(email){
       var emailDiv=document.createElement('div');
       emailDiv.className='link-email-label';
       emailDiv.textContent=email;
       div.appendChild(emailDiv);
     }
-
     var codeEl=document.createElement('code');
     codeEl.className='link-url';
     codeEl.id=eid;
     codeEl.textContent=url;
     div.appendChild(codeEl);
-
     var actionsDiv=document.createElement('div');
     actionsDiv.className='link-actions';
-
     var copyBtn=document.createElement('button');
     copyBtn.className='copy-btn';
     copyBtn.textContent='Copy link';
     copyBtn.onclick=(function(e,b){return function(){copyLink(e,b);};})(eid,copyBtn);
     actionsDiv.appendChild(copyBtn);
-
     var emailA=document.createElement('a');
     emailA.className='email-btn';
     emailA.href=mailtoHref;
     emailA.target='_blank';
     emailA.textContent='Open in email client';
     actionsDiv.appendChild(emailA);
-
     div.appendChild(actionsDiv);
     listEl.appendChild(div);
   });
@@ -630,7 +739,7 @@ async function renderStatus(){
   var container=document.getElementById('status-content');
   var project_id=getProjectId();
   if(!project_id){
-    container.innerHTML='<p style="font-size:13px;color:var(--text-muted)">No project set up yet. Go to Project setup to add your project and partners.</p>';
+    container.innerHTML='<p style="font-size:13px;color:var(--text-muted)">No project selected.</p>';
     return;
   }
   container.innerHTML='<p style="font-size:13px;color:var(--text-muted)">Loading…</p>';
@@ -644,7 +753,7 @@ async function renderStatus(){
           ?'<td><span class="badge-done">&#10003; Done</span></td>'
           :'<td><span class="badge-pending">Pending</span></td>';
       }).join('');
-      rows+='<tr><td>'+p.organisation_name+(p.email?'<br><span style="font-size:11px;color:var(--text-hint);font-weight:400">'+p.email+'</span>':'')+'</td>'+cells+'</tr>';
+      rows+='<tr><td>'+escHtml(p.organisation_name)+(p.email?'<br><span style="font-size:11px;color:var(--text-hint);font-weight:400">'+escHtml(p.email)+'</span>':'')+'</td>'+cells+'</tr>';
     });
     var totalExpected=data.status.length*STAGES.length;
     var totalDone=data.status.reduce(function(acc,p){return acc+p.completed_stages.length;},0);
@@ -654,7 +763,7 @@ async function renderStatus(){
       '<table class="status-table"><thead><tr><th>Partner</th>'+stageHeaders+'</tr></thead>'+
       '<tbody>'+rows+'</tbody></table></div>';
   }catch(e){
-    container.innerHTML='<p style="font-size:13px;color:var(--red)">Error loading status: '+e.message+'</p>';
+    container.innerHTML='<p style="font-size:13px;color:var(--red)">Error: '+escHtml(e.message)+'</p>';
   }
 }
 
@@ -667,66 +776,55 @@ function getStageForQ(qIdx){
 }
 
 function getAnswerV(ans){
-  /* Handle both new {v, note} format and legacy 'yes'/'no'/'idk'/'nr' strings */
-  if(ans === null || ans === undefined) return null;
-  if(typeof ans === 'object') return ans.v;
-  if(ans === 'yes') return 1;
-  if(ans === 'no') return 4;
-  if(ans === 'idk') return 3;
-  if(ans === 'nr') return 'nr';
+  if(ans===null||ans===undefined) return null;
+  if(typeof ans==='object') return ans.v;
+  if(ans==='yes') return 1;
+  if(ans==='no') return 4;
+  if(ans==='idk') return 3;
+  if(ans==='nr') return 'nr';
   return null;
 }
 
 function getAnswerNote(ans){
-  if(ans && typeof ans === 'object') return ans.note || '';
+  if(ans&&typeof ans==='object') return ans.note||'';
   return '';
 }
 
 function getAnswerLabel(qIdx, v){
-  if(v === 'nr') return 'Not Relevant';
-  var q = QUESTIONS[qIdx];
-  if(q && typeof v === 'number' && v >= 1 && v <= 5) return v+'. '+q.opts[v-1];
+  if(v==='nr') return 'Not Relevant';
+  var q=QUESTIONS[qIdx];
+  if(q&&typeof v==='number'&&v>=1&&v<=5) return v+'. '+q.opts[v-1];
   return String(v);
 }
 
 function computeIndicator(qIdx){
-  var stageIdx = getStageForQ(qIdx);
-  var relevant = [];
+  var stageIdx=getStageForQ(qIdx);
+  var relevant=[];
   _dashResponses.forEach(function(r){
-    if(r.stageIdx !== stageIdx) return;
-    var ans = r.answers[qIdx];
-    if(ans === null || ans === undefined) return;
-    var v = getAnswerV(ans);
-    if(v === null) return;
-    relevant.push({respondent:r.respondent, v:v, note:getAnswerNote(ans)});
+    if(r.stageIdx!==stageIdx) return;
+    var ans=r.answers[qIdx];
+    if(ans===null||ans===undefined) return;
+    var v=getAnswerV(ans);
+    if(v===null) return;
+    relevant.push({respondent:r.respondent,v:v,note:getAnswerNote(ans)});
   });
-
-  if(!relevant.length) return {color:'none', satisfactory:null, total:null, responses:[]};
-
-  var active = relevant.filter(function(r){ return r.v !== 'nr'; });
-  if(!active.length) return {color:'none', satisfactory:null, total:null, responses:relevant};
-
-  var satCount = active.filter(function(r){ return typeof r.v === 'number' && r.v <= 2; }).length;
-  var hasRed = active.some(function(r){ return typeof r.v === 'number' && r.v >= 3; });
-
-  return {
-    color: hasRed ? 'red' : 'green',
-    satisfactory: satCount,
-    total: active.length,
-    responses: relevant
-  };
+  if(!relevant.length) return{color:'none',satisfactory:null,total:null,responses:[]};
+  var active=relevant.filter(function(r){return r.v!=='nr';});
+  if(!active.length) return{color:'none',satisfactory:null,total:null,responses:relevant};
+  var satCount=active.filter(function(r){return typeof r.v==='number'&&r.v<=2;}).length;
+  var hasRed=active.some(function(r){return typeof r.v==='number'&&r.v>=3;});
+  return{color:hasRed?'red':'green',satisfactory:satCount,total:active.length,responses:relevant};
 }
 
-/* Indicator notes (actions taken, final status) stored in localStorage */
 function getIndNotesKey(){ return 'ar4d_ind_notes_'+(getProjectId()||'default'); }
 function getIndNotes(){
-  try{ return JSON.parse(localStorage.getItem(getIndNotesKey())||'{}'); }catch(e){ return {}; }
+  try{return JSON.parse(localStorage.getItem(getIndNotesKey())||'{}');}catch(e){return {};}
 }
-function saveIndNote(qIdx, field, value){
-  var notes = getIndNotes();
-  if(!notes[qIdx]) notes[qIdx] = {};
-  notes[qIdx][field] = value;
-  localStorage.setItem(getIndNotesKey(), JSON.stringify(notes));
+function saveIndNote(qIdx,field,value){
+  var notes=getIndNotes();
+  if(!notes[qIdx]) notes[qIdx]={};
+  notes[qIdx][field]=value;
+  localStorage.setItem(getIndNotesKey(),JSON.stringify(notes));
 }
 
 async function renderDashboard(){
@@ -734,7 +832,7 @@ async function renderDashboard(){
   var bodyEl=document.getElementById('dash-body');
   var project_id=getProjectId();
   if(!project_id){
-    emptyEl.textContent='No project set up yet. Indicators will appear once partners complete the questionnaire.';
+    emptyEl.textContent='No project selected.';
     emptyEl.style.display='block';bodyEl.style.display='none';return;
   }
   emptyEl.textContent='Loading…';
@@ -747,12 +845,12 @@ async function renderDashboard(){
       answers:r.answers
     };});
     if(!_dashResponses.length){
-      emptyEl.textContent='No responses have been submitted yet. Indicators will appear here once partners complete the questionnaire.';
+      emptyEl.textContent='No responses yet. Indicators will appear here once partners complete the questionnaire.';
       emptyEl.style.display='block';bodyEl.style.display='none';return;
     }
     emptyEl.style.display='none';bodyEl.style.display='block';
     var respondedStages=[...(new Set(_dashResponses.map(function(r){return r.stageIdx;})))];
-    var indNotes = getIndNotes();
+    var indNotes=getIndNotes();
     var container=document.getElementById('dash-indicators');
     container.innerHTML='';
 
@@ -769,12 +867,9 @@ async function renderDashboard(){
         var result=computeIndicator(qIdx);
         var dotClass=result.color==='green'?'dot-green':result.color==='red'?'dot-red':'dot-none';
         var savedNote=(indNotes[qIdx]&&indNotes[qIdx].actions)||'';
-        var savedFinal=(indNotes[qIdx]&&indNotes[qIdx].final)||'';
 
         var item=document.createElement('div');
         item.className='ind-item';
-
-        /* Header row */
         var indHdr=document.createElement('div');
         indHdr.className='ind-header';
         var stmt=document.createElement('span');
@@ -789,117 +884,81 @@ async function renderDashboard(){
         indHdr.appendChild(dot);
         indHdr.appendChild(chev);
 
-        /* Detail panel */
         var panel=document.createElement('div');
         panel.className='ind-panel';
 
-        /* Proportion + Initial Status row */
         var metaRow=document.createElement('div');
         metaRow.className='ind-meta-row';
-        if(result.satisfactory !== null){
+        if(result.satisfactory!==null){
           var propSpan=document.createElement('span');
           propSpan.className='ind-meta-item';
-          propSpan.innerHTML='Proportion: <strong>'+result.satisfactory+' of '+result.total+'</strong> satisfactory (options 1–2)';
+          propSpan.innerHTML='<strong>'+result.satisfactory+' out of '+result.total+'</strong> partners responded positively';
           metaRow.appendChild(propSpan);
         }
         var statusSpan=document.createElement('span');
         statusSpan.className='ind-meta-item';
         statusSpan.innerHTML='Initial status: ';
         var statusBadge=document.createElement('span');
-        if(result.color==='green'){
-          statusBadge.className='status-badge-green';
-          statusBadge.textContent='Green — satisfactory';
-        } else if(result.color==='red'){
-          statusBadge.className='status-badge-red';
-          statusBadge.textContent='Red — needs attention';
-        } else {
-          statusBadge.className='status-badge-none';
-          statusBadge.textContent='No data';
-        }
+        statusBadge.style.cssText='display:inline-block;width:10px;height:10px;border-radius:50%;margin-left:4px;vertical-align:middle';
+        if(result.color==='green'){statusBadge.style.background='var(--green)';}
+        else if(result.color==='red'){statusBadge.style.background='var(--red)';}
+        else{statusBadge.style.background='var(--border-strong)';}
         statusSpan.appendChild(statusBadge);
         metaRow.appendChild(statusSpan);
         panel.appendChild(metaRow);
 
-        /* Response table */
         if(result.responses.length){
           var tbl=document.createElement('table');
           tbl.className='resp-table';
           tbl.innerHTML='<thead><tr><th>Respondent</th><th>Organisation</th><th>Response</th><th>Notes</th><th></th></tr></thead>';
           var tbody=document.createElement('tbody');
           result.responses.forEach(function(r){
-            var isSat = typeof r.v === 'number' && r.v <= 2;
-            var isUnsat = typeof r.v === 'number' && r.v >= 3;
-            var isNR = r.v === 'nr';
-            var aCls = isNR ? 'answer-nr' : isSat ? 'answer-sat' : 'answer-unsat';
+            var isSat=typeof r.v==='number'&&r.v<=2;
+            var isUnsat=typeof r.v==='number'&&r.v>=3;
+            var isNR=r.v==='nr';
+            var aCls=isNR?'answer-nr':isSat?'answer-sat':'answer-unsat';
             var tr=document.createElement('tr');
-            var tdName=document.createElement('td');
-            tdName.textContent=r.respondent.name||'—';
-            var tdOrg=document.createElement('td');
-            tdOrg.textContent=r.respondent.org||'—';
+            var tdName=document.createElement('td');tdName.textContent=r.respondent.name||'—';
+            var tdOrg=document.createElement('td');tdOrg.textContent=r.respondent.org||'—';
             var tdAns=document.createElement('td');
-            tdAns.innerHTML='<span class="'+aCls+'">'+getAnswerLabel(qIdx,r.v)+'</span>';
-            if(r.note){
-              var noteDiv=document.createElement('div');
-              noteDiv.className='note-text';
-              noteDiv.textContent=r.note;
-              tdAns.appendChild(noteDiv);
-            }
-            var tdAction=document.createElement('td');
+            tdAns.innerHTML='<span class="'+aCls+'">'+escHtml(getAnswerLabel(qIdx,r.v))+'</span>';
+            var tdNote=document.createElement('td');
+            if(r.note){var nd=document.createElement('span');nd.className='note-text';nd.style.fontStyle='normal';nd.textContent=r.note;tdNote.appendChild(nd);}else{tdNote.textContent='—';}
+            var tdAction=document.createElement('td');tdAction.style.cssText='text-align:center;width:36px';
             if(isUnsat){
-              var reopenBtn=document.createElement('button');
-              reopenBtn.className='reopen-btn';
-              reopenBtn.textContent='Reopen for '+(r.respondent.name||'respondent');
-              reopenBtn.title='Reopen this question for the respondent to re-check their answer';
-              reopenBtn.onclick=function(){ alert('Reopen feature coming in the next update. Please contact the respondent to re-submit when the feature is available.'); };
-              tdAction.appendChild(reopenBtn);
+              var rb=document.createElement('button');
+              rb.className='reassign-btn';
+              rb.title='Reassign question';
+              rb.innerHTML='&#8635;';
+              rb.onclick=function(){alert('Reopen feature coming in the next update.');};
+              tdAction.appendChild(rb);
             }
-            tr.appendChild(tdName);
-            tr.appendChild(tdOrg);
-            tr.appendChild(tdAns);
-            tr.appendChild(tdAction);
+            tr.appendChild(tdName);tr.appendChild(tdOrg);tr.appendChild(tdAns);tr.appendChild(tdNote);tr.appendChild(tdAction);
             tbody.appendChild(tr);
           });
           tbl.appendChild(tbody);
           panel.appendChild(tbl);
-        } else {
-          var noResp=document.createElement('div');
-          noResp.className='no-responses';
-          noResp.textContent='No responses yet.';
+        }else{
+          var noResp=document.createElement('div');noResp.className='no-responses';noResp.textContent='No responses yet.';
           panel.appendChild(noResp);
         }
 
-        /* Actions taken + Final Status */
         var actSection=document.createElement('div');
         actSection.className='actions-section';
-
-        var actLabel=document.createElement('div');
-        actLabel.className='actions-label';
-        actLabel.textContent='Actions taken to address gaps';
+        var actLabel=document.createElement('div');actLabel.className='actions-label';actLabel.textContent='Actions taken to address gaps';
         actSection.appendChild(actLabel);
-
         var actTA=document.createElement('textarea');
-        actTA.className='actions-input';
-        actTA.rows=2;
-        actTA.value=savedNote;
+        actTA.className='actions-input';actTA.rows=2;actTA.value=savedNote;
         actTA.placeholder='Record corrective actions reported by partners…';
-        actTA.oninput=(function(qi){ return function(){ saveIndNote(qi,'actions',this.value); }; })(qIdx);
+        actTA.oninput=(function(qi){return function(){saveIndNote(qi,'actions',this.value);};})(qIdx);
         actSection.appendChild(actTA);
-
-        var finalRow=document.createElement('div');
-        finalRow.className='final-status-row';
-        var finalLabel=document.createElement('span');
-        finalLabel.className='final-status-label';
-        finalLabel.textContent='Final status:';
+        var finalRow=document.createElement('div');finalRow.className='final-status-row';
+        var finalLabel=document.createElement('span');finalLabel.className='final-status-label';finalLabel.textContent='Final status:';
         finalRow.appendChild(finalLabel);
-
         var finalBadge=document.createElement('span');
-        if(result.color === 'green'){
-          finalBadge.className='status-badge-green';
-          finalBadge.textContent='Green — satisfactory';
-        } else {
-          finalBadge.className='status-badge-none';
-          finalBadge.textContent='Pending re-check';
-        }
+        finalBadge.style.cssText='display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:middle';
+        if(result.color==='green'){finalBadge.style.background='var(--green)';}
+        else{finalBadge.style.background='var(--border-strong)';}
         finalRow.appendChild(finalBadge);
         actSection.appendChild(finalRow);
         panel.appendChild(actSection);
@@ -908,8 +967,7 @@ async function renderDashboard(){
           var open=panel.classList.toggle('open');
           chev.classList.toggle('open',open);
         });
-        item.appendChild(indHdr);
-        item.appendChild(panel);
+        item.appendChild(indHdr);item.appendChild(panel);
         stageDiv.appendChild(item);
       });
       container.appendChild(stageDiv);
@@ -920,35 +978,19 @@ async function renderDashboard(){
   }
 }
 
+/* ── Utilities ── */
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function formatDate(d){ if(!d) return ''; try{ return new Date(d+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}); }catch(e){ return d; } }
+
 /* ── On load ── */
-window.addEventListener('DOMContentLoaded',async function(){
+window.addEventListener('DOMContentLoaded', function(){
   var k=getFacKey();
   if(k){
     document.getElementById('fac-key-input').value=k;
     setKeyBarSaved();
-  }
-  buildStageToggles();
-  if(document.getElementById('partner-entries').children.length===0) addPartnerEntry();
-
-  var project_id=getProjectId();
-  if(project_id){
-    try{
-      var data=await fetch((API_BASE||'')+'/api/projects/'+project_id).then(function(r){return r.json();});
-      if(!data.error){
-        document.getElementById('fac-project').value=data.title||'';
-        document.getElementById('fac-start').value=data.start_date||'';
-        document.getElementById('fac-end').value=data.end_date||'';
-        document.getElementById('fac-funder').value=data.funder||'';
-        document.getElementById('fac-budget').value=data.budget_usd||'';
-        if(data.partners&&data.partners.length){
-          document.getElementById('partner-entries').innerHTML='';
-          data.partners.forEach(function(p){
-            addPartnerEntry(p.organisation_name||'', p.email||'', p.token||'');
-          });
-          displayLinks(project_id, data.partners, data.title||'');
-        }
-      }
-    }catch(e){console.warn('Could not reload project:',e.message);}
+    showProjectList();
+  } else {
+    showProjectList(); /* shows the "enter your key" message */
   }
 });
 </script>
