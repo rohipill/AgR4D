@@ -25,11 +25,15 @@ module.exports = async function handler(req, res) {
 
     const completed_stages = responsesResult.records.map(r => r.fields.stage_index);
 
+    let open_stages = [0,1,2,3,4,5];
+    try { open_stages = JSON.parse(project.fields.open_stages || '[0,1,2,3,4,5]'); } catch(e) {}
+
     res.status(200).json({
       project_id,
       project_title: project.fields.title || '',
       organisation_name: partnerRec.fields.organisation_name || '',
-      completed_stages
+      completed_stages,
+      open_stages
     });
   } catch (err) {
     console.error('GET /api/partner:', err);

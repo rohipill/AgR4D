@@ -12,7 +12,7 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const { title, start_date, end_date, funder, budget_usd, partners } = req.body;
+    const { title, start_date, end_date, funder, budget_usd, open_stages, partners } = req.body;
     if (!title || !Array.isArray(partners) || !partners.length) {
       return res.status(400).json({ error: 'title and at least one partner are required' });
     }
@@ -24,6 +24,9 @@ module.exports = async function handler(req, res) {
     if (budget_usd) {
       const num = parseFloat(String(budget_usd).replace(/[^0-9.]/g, ''));
       if (!isNaN(num)) projectFields.budget_usd = num;
+    }
+    if (Array.isArray(open_stages)) {
+      projectFields.open_stages = JSON.stringify(open_stages);
     }
 
     const project = await createRecord('Projects', projectFields);

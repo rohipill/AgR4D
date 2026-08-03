@@ -20,6 +20,9 @@ module.exports = async function handler(req, res) {
       token: r.fields.token || ''
     }));
 
+    let open_stages = [0,1,2,3,4,5];
+    try { open_stages = JSON.parse(project.fields.open_stages || '[0,1,2,3,4,5]'); } catch(e) {}
+
     res.status(200).json({
       project_id: id,
       title: project.fields.title || '',
@@ -27,6 +30,7 @@ module.exports = async function handler(req, res) {
       end_date: project.fields.end_date || '',
       funder: project.fields.funder || '',
       budget_usd: project.fields.budget_usd != null ? String(project.fields.budget_usd) : '',
+      open_stages,
       partners
     });
   } catch (err) {

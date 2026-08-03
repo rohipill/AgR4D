@@ -1,4 +1,4 @@
-?<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -68,8 +68,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 .circle-icon{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 1.1rem}
 .circle-green{background:var(--green-bg);border:1px solid var(--green-border)}
 .circle-blue{background:var(--blue-bg);border:1px solid var(--blue-border)}
-</style>
-<style>
+/* Progress */
 .progress-wrap{margin-bottom:1.5rem}
 .progress-meta{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
 .progress-label{font-size:12px;color:var(--text-muted);font-weight:500}
@@ -77,20 +76,37 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 .progress-track{height:4px;background:var(--border);border-radius:2px;overflow:hidden}
 .progress-fill{height:100%;background:var(--green);border-radius:2px;transition:width .35s ease}
 .stage-pill{display:inline-block;font-size:12px;padding:3px 10px;border-radius:20px;background:var(--bg);border:1px solid var(--border);color:var(--text-muted);margin-bottom:.85rem;font-weight:500}
+/* Question card */
 .question-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;box-shadow:var(--shadow)}
 .q-eyebrow{font-size:11px;color:var(--text-hint);font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.6rem}
-.q-text{font-family:'DM Serif Display',serif;font-size:19px;line-height:1.45;color:var(--text);margin-bottom:1.5rem}
+.q-text{font-family:'DM Serif Display',serif;font-size:19px;line-height:1.45;color:var(--text);margin-bottom:.4rem}
 @media(min-width:500px){.q-text{font-size:21px}}
-.response-options{display:flex;flex-direction:column;gap:10px;margin-bottom:1rem}
-.resp-btn{display:flex;align-items:center;gap:12px;padding:13px 16px;border:1px solid var(--border);border-radius:var(--radius-md);font-size:14px;font-family:'DM Sans',sans-serif;cursor:pointer;background:var(--surface);color:var(--text);transition:all .15s;text-align:left;min-height:52px;-webkit-tap-highlight-color:transparent;width:100%}
+.q-hint{font-size:12px;color:var(--text-muted);margin-bottom:1.25rem;font-style:italic;line-height:1.5}
+.response-options{display:flex;flex-direction:column;gap:8px;margin-bottom:.75rem}
+/* Likert option buttons */
+.resp-btn{display:flex;align-items:center;gap:12px;padding:11px 14px;border:1px solid var(--border);border-radius:var(--radius-md);font-size:14px;font-family:'DM Sans',sans-serif;cursor:pointer;background:var(--surface);color:var(--text);transition:all .15s;text-align:left;min-height:48px;-webkit-tap-highlight-color:transparent;width:100%}
 .resp-btn:hover{border-color:var(--border-strong);background:var(--bg)}
-.resp-dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;transition:all .15s;display:flex;align-items:center;justify-content:center}
-.resp-btn.sel .resp-dot{border-color:var(--border-strong);background:var(--border-strong)}
-.resp-btn.sel .resp-dot::after{content:'';width:6px;height:6px;border-radius:50%;background:#fff}
-.resp-btn.sel{border-color:var(--border-strong);background:var(--bg);color:var(--text)}
+.resp-num{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--text-hint);transition:all .15s}
+.resp-btn.sel{border-color:var(--text);background:var(--bg)}
+.resp-btn.sel .resp-num{background:var(--text);border-color:var(--text);color:#fff}
+/* NR button - separate, smaller */
+.resp-btn-nr{display:flex;align-items:center;gap:10px;padding:8px 14px;border:1px dashed var(--border);border-radius:var(--radius-md);font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;background:transparent;color:var(--text-muted);transition:all .15s;text-align:left;min-height:40px;-webkit-tap-highlight-color:transparent;width:100%;margin-top:4px}
+.resp-btn-nr:hover{border-color:var(--border-strong);color:var(--text)}
+.resp-btn-nr.sel{border-color:var(--border-strong);background:var(--bg);color:var(--text)}
+/* Notes field */
+.notes-wrap{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border)}
+.notes-label{font-size:11px;font-weight:500;color:var(--text-muted);margin-bottom:4px;letter-spacing:.02em;display:flex;align-items:center;gap:6px}
+.notes-optional{font-weight:400;color:var(--text-hint)}
+textarea.notes-input{font-size:14px;resize:vertical;min-height:68px;padding:8px 10px;line-height:1.5}
+/* Nav */
 .q-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.25rem;gap:10px}
 .q-nav-back{font-size:13px;color:var(--text-hint);cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;padding:8px 0;min-height:44px;display:flex;align-items:center;gap:5px;-webkit-tap-highlight-color:transparent}
 .q-nav-back:hover{color:var(--text-muted)}
+/* Instruction page */
+.instruction-item{display:flex;gap:10px;padding:.6rem 0;border-bottom:1px solid var(--border)}
+.instruction-item:last-child{border-bottom:none}
+.instruction-dot{width:6px;height:6px;border-radius:50%;background:var(--text-muted);flex-shrink:0;margin-top:8px}
+.instruction-text{font-size:14px;color:var(--text-muted);line-height:1.6}
 </style>
 </head>
 <body>
@@ -101,13 +117,33 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
     <div class="app-title">Partnership Assessment Tool</div>
   </div>
 
+  <!-- INSTRUCTION -->
+  <div id="screen-instruction" class="screen active">
+    <div class="card">
+      <h2 style="font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:.3rem">Before you begin</h2>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:1.25rem">Please read the following guidelines before completing the questionnaire.</p>
+      <div style="margin-bottom:1.25rem">
+        <div class="instruction-item"><span class="instruction-dot"></span><span class="instruction-text">Project partners are requested to attempt the survey at the end of each or all stages of a research project.</span></div>
+        <div class="instruction-item"><span class="instruction-dot"></span><span class="instruction-text">Every partner in a project is required to use a separate questionnaire.</span></div>
+        <div class="instruction-item"><span class="instruction-dot"></span><span class="instruction-text">Respond to all questions.</span></div>
+        <div class="instruction-item"><span class="instruction-dot"></span><span class="instruction-text">Please indicate <strong>Not Relevant</strong> only if the question is not relevant to your organisation due to its role in the project.</span></div>
+        <div class="instruction-item"><span class="instruction-dot"></span><span class="instruction-text">You can use the Notes field to provide additional information to explain your responses, including the choice of Not Relevant or your dissatisfaction over any aspect of partnership.</span></div>
+      </div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-md);padding:.85rem 1rem;margin-bottom:1.25rem">
+        <div style="font-size:11px;font-weight:500;color:var(--text-hint);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.3rem">Definition</div>
+        <p style="font-size:13px;color:var(--text-muted);line-height:1.6">In this questionnaire, <strong>organisation</strong> is defined as: Any institution or non-registered/informal entity, including collectives and community-based entities.</p>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="continueToDetails()">Continue &rarr;</button>
+    </div>
+  </div>
+
   <!-- DETAILS -->
-  <div id="screen-details" class="screen active">
+  <div id="screen-details" class="screen">
     <div class="card">
       <h2 style="font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:.3rem">Your details</h2>
       <p style="font-size:13px;color:var(--text-muted);margin-bottom:1.25rem">Please complete all fields before continuing.</p>
-      <div id="loading-msg" class="alert alert-info" style="display:none">Loading your questionnaire link...</div>
-      <div id="token-error" class="alert alert-error show" style="display:none"></div>
+      <div id="loading-msg" class="alert alert-info" style="display:none">Loading your questionnaire&hellip;</div>
+      <div id="token-error" class="alert alert-error"></div>
       <div class="field">
         <label class="field-label">Project title</label>
         <input type="text" id="r-project" readonly>
@@ -119,7 +155,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
       <div class="two-col">
         <div class="field">
           <label class="field-label">Your name</label>
-          <input type="text" id="r-name">
+          <input type="text" id="r-name" oninput="validateDetailsForm()">
         </div>
         <div class="field">
           <label class="field-label">Your designation</label>
@@ -128,20 +164,15 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
       </div>
       <div class="field">
         <label class="field-label">Stage to assess</label>
-        <select id="r-stage" onchange="validateStageSelect()">
-          <option value="">"� select a stage "�</option>
-          <option value="0">Stage 1: Identification &amp; scoping</option>
-          <option value="1">Stage 2: Research design &amp; planning</option>
-          <option value="2">Stage 3: Data collection &amp; fieldwork</option>
-          <option value="3">Stage 4: Analysis &amp; interpretation</option>
-          <option value="4">Stage 5: Dissemination &amp; communication</option>
-          <option value="5">Stage 6: Review &amp; scaling sustainably</option>
+        <select id="r-stage" onchange="validateDetailsForm()">
+          <option value="">-- select a stage --</option>
         </select>
         <div class="alert-error" id="err-stage-lock" style="margin-top:6px;font-size:12px;padding:.5rem .75rem;display:none"></div>
       </div>
       <div class="alert alert-error" id="err-details">Please fill in your name and select a stage to continue.</div>
       <div class="btn-row">
-        <button class="btn btn-primary" id="btn-start" onclick="startQuestionnaire()" disabled>Start questionnaire →</button>
+        <button class="btn btn-primary" id="btn-start" onclick="startQuestionnaire()" disabled>Start questionnaire &rarr;</button>
+        <button class="btn btn-sm" onclick="showScreen('screen-instruction')" style="color:var(--text-hint)">Back</button>
       </div>
     </div>
   </div>
@@ -159,11 +190,17 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
     <div class="question-card">
       <div class="q-eyebrow" id="q-eyebrow"></div>
       <div class="q-text" id="q-text"></div>
+      <div class="q-hint" id="q-hint" style="display:none"></div>
       <div class="response-options" id="resp-options"></div>
+      <div id="resp-nr-wrap"></div>
       <div class="alert alert-error" id="err-answer">Please select a response to continue.</div>
+      <div class="notes-wrap">
+        <div class="notes-label">Notes <span class="notes-optional">(optional)</span></div>
+        <textarea class="notes-input" id="q-notes" rows="2" placeholder="Add any context or explanation for your response..." oninput="updateCurrentNote(this.value)"></textarea>
+      </div>
       <div class="q-nav">
-        <button class="q-nav-back" id="q-back-btn" onclick="goBack()">← Back</button>
-        <button class="btn btn-primary" onclick="goNext()" id="q-next-btn">Next →</button>
+        <button class="q-nav-back" id="q-back-btn" onclick="goBack()">&#8592; Back</button>
+        <button class="btn btn-primary" onclick="goNext()" id="q-next-btn">Next &rarr;</button>
       </div>
     </div>
   </div>
@@ -171,11 +208,11 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
   <!-- STAGE COMPLETE -->
   <div id="screen-stage-complete" class="screen">
     <div class="card" style="text-align:center;padding:2rem 1.5rem">
-      <div class="circle-icon circle-green">✓</div>
+      <div class="circle-icon circle-green">&#10003;</div>
       <h2 style="font-family:'DM Serif Display',serif;font-size:21px;margin-bottom:.5rem" id="stage-complete-title"></h2>
       <p style="font-size:14px;color:var(--text-muted);max-width:400px;margin:0 auto 1.5rem;line-height:1.6" id="stage-complete-msg"></p>
       <div class="btn-group" style="justify-content:center">
-        <button class="btn btn-primary" id="btn-next-stage" onclick="proceedNextStage()">Proceed to next stage →</button>
+        <button class="btn btn-primary" id="btn-next-stage" onclick="proceedNextStage()">Proceed to next stage &rarr;</button>
         <button class="btn" onclick="endSurvey()">End survey</button>
       </div>
     </div>
@@ -184,7 +221,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
   <!-- THANK YOU -->
   <div id="screen-thankyou" class="screen">
     <div class="card" style="text-align:center;padding:2rem 1.5rem">
-      <div class="circle-icon circle-blue">🤝</div>
+      <div class="circle-icon circle-blue">&#129309;</div>
       <h2 style="font-family:'DM Serif Display',serif;font-size:21px;margin-bottom:.5rem">Thank you for your responses</h2>
       <p style="font-size:14px;color:var(--text-muted);max-width:420px;margin:0 auto 1.25rem;line-height:1.6">Your inputs have been recorded and will contribute to the overall partnership health assessment.</p>
       <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-md);padding:1rem;max-width:380px;margin:0 auto;text-align:left">
@@ -196,110 +233,195 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 
 </div>
 <script>
-/* ── Configuration ── */
-var API_BASE = ''; /* Set to your Vercel URL if HTML is hosted separately, e.g. 'https://myapp.vercel.app' */
+var API_BASE = '';
 
 var STAGES=[
-  {name:"Identification & scoping",    short:"Stage 1", qs:[0,1,2,3,4]},
-  {name:"Research design & planning",  short:"Stage 2", qs:[5,6,7,8,9,10]},
-  {name:"Data collection & fieldwork", short:"Stage 3", qs:[11,12,13,14]},
-  {name:"Analysis & interpretation",   short:"Stage 4", qs:[15,16,17,18]},
-  {name:"Dissemination & communication",short:"Stage 5",qs:[19,20,21,22,23,24]},
-  {name:"Review & scaling sustainably", short:"Stage 6",qs:[25,26,27,28,29,30]}
+  {name:"Identification & scoping",      short:"Stage 1", qs:[0,1,2,3,4]},
+  {name:"Research design & planning",    short:"Stage 2", qs:[5,6,7,8,9,10]},
+  {name:"Data collection & fieldwork",   short:"Stage 3", qs:[11,12,13,14]},
+  {name:"Analysis & interpretation",     short:"Stage 4", qs:[15,16,17,18]},
+  {name:"Dissemination & communication", short:"Stage 5", qs:[19,20,21,22,23]},
+  {name:"Review & scaling sustainably",  short:"Stage 6", qs:[24,25,26,27,28,29]}
 ];
+
 var QUESTIONS=[
-  {text:"Was your organisation involved early enough to influence the direction or scope of the project?",has_nr:true},
-  {text:"Did your organisation receive project information in a timely manner and through accessible communication channels?",has_nr:false},
-  {text:"Could your organisation communicate freely and directly with the other project partners?",has_nr:false},
-  {text:"Were your organisation's national or institutional realities considered during scoping?",has_nr:true},
-  {text:"Did your organisation's expectations and concerns contribute to shaping the project's scope?",has_nr:true},
-  {text:"Could your organisation influence the research questions, design, or methods?",has_nr:true},
-  {text:"Did your organisation's role in the project allow it to contribute appropriately?",has_nr:false},
-  {text:"Were authorship or recognition arrangements discussed early with your organisation?",has_nr:true},
-  {text:"Were the outcomes of authorship and recognition discussions fair to your organisation?",has_nr:true},
-  {text:"Were your organisation's learning or capacity needs recognised and addressed in the project?",has_nr:true},
-  {text:"Was your organisation involved in discussions on sustainability or continuation of the project?",has_nr:true},
-  {text:"Did your organisation have access to project data relevant to its role?",has_nr:true},
-  {text:"Were problems, delays, or changes to the implementation plan discussed openly by the project partners as the work progressed?",has_nr:false},
-  {text:"Were field or implementation approaches appropriate to the local or national context?",has_nr:false},
-  {text:"Could your organisation contribute to decisions on how data would be used or interpreted?",has_nr:true},
-  {text:"Did your organisation help interpret or analyse the findings?",has_nr:true},
-  {text:"Were the findings shared with your organisation before they were shared externally?",has_nr:false},
-  {text:"Did the partners openly discuss what did not work or fell short of expectations during the project?",has_nr:false},
-  {text:"Were authorship, attribution, or recognition commitments to your organisation respected?",has_nr:true},
-  {text:"Did your organisation have an active role in communicating the findings?",has_nr:true},
-  {text:"Could your organisation access and use the project outputs?",has_nr:true},
-  {text:"From your organisation's perspective, were project outputs shared in formats that relevant users could use?",has_nr:false},
-  {text:"Were project outputs available in languages that relevant users could understand?",has_nr:false},
-  {text:"Was your organisation properly credited in communication outputs?",has_nr:true},
-  {text:"Were the findings presented in forums that your organisation could access or join?",has_nr:false},
-  {text:"Was your organisation involved in reviewing the partnership?",has_nr:true},
-  {text:"Did the partnership strengthen your organisation's capacity or learning?",has_nr:true},
-  {text:"Were benefit-sharing and other agreed commitments to your organisation fulfilled?",has_nr:true},
-  {text:"Was your organisation involved in discussions on how the findings would be taken forward or scaled?",has_nr:true},
-  {text:"To your organisation's knowledge, were relevant local partners involved in shaping the scaling approach?",has_nr:false},
-  {text:"To your organisation's knowledge, were relevant end-users involved in shaping the scaling approach?",has_nr:false}
+  {text:"When was your organisation brought into the scoping process?",
+   opts:["At the start","Somewhat early","Midway","Near the end","After completion"],has_nr:true},
+  {text:"How regularly did your organisation receive project information in a timely manner?",
+   opts:["Always","Most of the time","Sometimes","Rarely","Never"],has_nr:false},
+  {text:"How often could your organisation freely communicate with the other project partners?",
+   opts:["Always","Most of the time","Sometimes","Rarely","Never"],has_nr:false},
+  {text:"To what extent were your organisation's expectations from the project considered during the project's scoping discussions?",
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Not considered"],has_nr:true},
+  {text:"To what extent were your organisation's concerns in the project's context considered during scoping discussions?",
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Not considered"],has_nr:true},
+  {text:"To what extent could your organisation contribute to research design?",
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Not considered"],has_nr:true},
+  {text:"Considering your organisation's role, to what extent could it contribute to the project until now?",
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Not considered"],has_nr:true},
+  {text:"When were authorship arrangements discussed with your organisation?",
+   opts:["Early enough","Just in time","With limited time","Too late","Not discussed"],has_nr:true,
+   hint:"Consider if there was enough time for your organisation to meaningfully negotiate and agree on the arrangements."},
+  {text:"How fair were the outcomes of authorship/recognition discussions to your organisation?",
+   opts:["Very fair","Fair","Somewhat fair","Unfair","Very unfair"],has_nr:true},
+  {text:"How much of your organisation's learning or capacity needs relevant to the project was recognised during the planning process?",
+   opts:["All","Most","About half","A few","Not recognised"],has_nr:true},
+  {text:"To what extent did the partnership involve your organisation in discussions on sustainability or project continuation?",
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Not involved"],has_nr:true},
+  {text:"How much access to relevant project data did your organisation have?",
+   opts:["Full","Significant","Moderate","Negligible","No access"],has_nr:true},
+  {text:"How often were challenges and changes to the implementation plan discussed openly by project partners?",
+   opts:["Always","Most of the time","Sometimes","Rarely","Never"],has_nr:false},
+  {text:"How appropriate were the project's implementation approaches to the local or national context?",
+   opts:["Very appropriate","Appropriate","Somewhat appropriate","Inappropriate","Very inappropriate"],has_nr:false},
+  {text:"To what extent could your organisation contribute to decisions on the project's data interpretation?",
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Could not contribute"],has_nr:true},
+  {text:"To what extent could your organisation contribute to analysing the findings?",
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Could not contribute"],has_nr:true},
+  {text:"How long before external sharing were the project's findings shared with your organisation?",
+   opts:["Well in advance","Just enough time","Very little","No time","Not shared"],has_nr:true,
+   hint:"Consider if the time given to your organisation was adequate for reviewing findings and responding."},
+  {text:"To what extent did the partners discuss the project's shortcomings?",
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Not discussed"],has_nr:false},
+  {text:"How many of the authorship commitments made to your organisation were honoured?",
+   opts:["All","Most","About half","A few","None"],has_nr:true},
+  {text:"To what extent did the partnership involve your organisation in communicating the findings?",
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Not involved"],has_nr:true},
+  {text:"How accessible were the project's outputs to your organisation?",
+   opts:["Very easily accessible","Fairly easily accessible","Somewhat easily accessible","Difficult to access","Not accessible"],has_nr:false},
+  {text:"Which of the following options best describes the accessibility of project's findings to end users?",
+   opts:["Very easily accessible","Fairly easily accessible","Somewhat easily accessible","Difficult to access","Not accessible"],has_nr:false},
+  {text:"Rate your level of satisfaction with the way your organisation was credited in communication outputs.",
+   opts:["Very satisfied","Satisfied","Somewhat satisfied","Unsatisfied","Very unsatisfied"],has_nr:true},
+  {text:"How many of the forums where the project findings were presented were accessible to your organisation?",
+   opts:["All","Most","About half","A few","None"],has_nr:true},
+  {text:"To what extent was your organisation involved in reviewing the partnership?",
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Not involved"],has_nr:true},
+  {text:"To what extent did the partnership strengthen its capacity or learning?",
+   opts:["Full extent","Large extent","Moderate extent","Small extent","No difference"],has_nr:true},
+  {text:"How many of the benefit-sharing commitments made to your organisation were fulfilled?",
+   opts:["All","Most","About half","A few","None"],has_nr:true},
+  {text:"To what extent could your organisation contribute to discussions on scaling the project's outcomes?",
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Could not contribute"],has_nr:true},
+  {text:"To what extent did the partnership involve relevant local partners in shaping the scaling approach?",
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Not involved"],has_nr:false},
+  {text:"To what extent did the partnership involve relevant end users or their representatives in shaping the scaling approach?",
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Not involved"],has_nr:false}
 ];
 
 var TOKEN = '';
-var session = {respondent:{}, currentStageIdx:0, currentQPos:0, answers:[], completedStages:[]};
+var _loadedData = null;
+var _loadDone = false;
+var _loadError = null;
+
+var session = {
+  respondent: {},
+  currentStageIdx: 0,
+  currentQPos: 0,
+  answers: [],
+  completedStages: [],
+  openStages: [0,1,2,3,4,5]
+};
 
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
 }
+
 function getParam(name){
   return new URLSearchParams(window.location.search).get(name)||'';
 }
 
-window.addEventListener('DOMContentLoaded', async function(){
+function initAnswers(){
+  session.answers = [];
+  for(var i=0;i<30;i++) session.answers.push({v:null,note:''});
+}
+
+window.addEventListener('DOMContentLoaded', function(){
   TOKEN = getParam('token');
+  var errorEl = document.getElementById('token-error');
+
+  if(!TOKEN){
+    _loadDone = true;
+    _loadError = 'No link token found. Please use the personalised link provided by your facilitator.';
+    return;
+  }
+
+  // Load partner data in background while user reads instructions
+  fetch((API_BASE||'')+'/api/partner?token='+encodeURIComponent(TOKEN))
+    .then(function(res){ return res.json().then(function(d){ return {ok:res.ok,data:d}; }); })
+    .then(function(r){
+      _loadDone = true;
+      if(!r.ok || r.data.error){
+        _loadError = r.data.error || 'This link is not recognised. Please contact your facilitator.';
+      } else {
+        _loadedData = r.data;
+      }
+    })
+    .catch(function(e){
+      _loadDone = true;
+      _loadError = 'Could not connect to the server. Please check your internet connection and try again.';
+    });
+});
+
+function continueToDetails(){
+  showScreen('screen-details');
   var loadingEl = document.getElementById('loading-msg');
   var errorEl = document.getElementById('token-error');
   var startBtn = document.getElementById('btn-start');
 
   if(!TOKEN){
     errorEl.textContent = 'No link token found. Please use the personalised link provided by your facilitator.';
-    errorEl.style.display = 'block';
+    errorEl.classList.add('show');
     return;
   }
 
-  loadingEl.style.display = 'block';
-  try{
-    var res = await fetch((API_BASE||'')+'/api/partner?token='+encodeURIComponent(TOKEN));
-    var data = await res.json();
-    loadingEl.style.display = 'none';
-    if(!res.ok || data.error){
-      errorEl.textContent = data.error || 'This link is not recognised. Please contact your facilitator.';
-      errorEl.style.display = 'block';
-      return;
-    }
-    document.getElementById('r-project').value = data.project_title || '';
-    document.getElementById('r-org').value = data.organisation_name || '';
-    session.completedStages = data.completed_stages || [];
-    startBtn.disabled = false;
-  }catch(e){
-    loadingEl.style.display = 'none';
-    errorEl.textContent = 'Could not connect to the server. Please check your internet connection and try again.';
-    errorEl.style.display = 'block';
+  if(_loadDone){
+    applyLoadResult(loadingEl, errorEl, startBtn);
+  } else {
+    loadingEl.style.display = 'block';
+    var interval = setInterval(function(){
+      if(_loadDone){
+        clearInterval(interval);
+        loadingEl.style.display = 'none';
+        applyLoadResult(loadingEl, errorEl, startBtn);
+      }
+    }, 200);
   }
-});
+}
 
-function validateStageSelect(){
+function applyLoadResult(loadingEl, errorEl, startBtn){
+  if(_loadError){
+    errorEl.textContent = _loadError;
+    errorEl.classList.add('show');
+    return;
+  }
+  var data = _loadedData;
+  document.getElementById('r-project').value = data.project_title || '';
+  document.getElementById('r-org').value = data.organisation_name || '';
+  session.completedStages = data.completed_stages || [];
+  session.openStages = data.open_stages || [0,1,2,3,4,5];
+  buildStageOptions();
+}
+
+function buildStageOptions(){
+  var select = document.getElementById('r-stage');
+  select.innerHTML = '<option value="">-- select a stage --</option>';
+  session.openStages.forEach(function(si){
+    if(session.completedStages.indexOf(si) > -1) return;
+    var opt = document.createElement('option');
+    opt.value = si;
+    opt.textContent = 'Stage '+(si+1)+': '+STAGES[si].name;
+    select.appendChild(opt);
+  });
+  validateDetailsForm();
+}
+
+function validateDetailsForm(){
+  var name = document.getElementById('r-name').value.trim();
   var sv = document.getElementById('r-stage').value;
-  var lockErr = document.getElementById('err-stage-lock');
-  if(sv === ''){ lockErr.style.display='none'; return true; }
-  var idx = parseInt(sv);
-  if(session.completedStages.indexOf(idx) > -1){
-    lockErr.textContent = 'You have already completed this stage. Please contact the facilitator if you need to resubmit.';
-    lockErr.style.display = 'block'; return false;
-  }
-  if(idx > 0 && session.completedStages.indexOf(idx-1) === -1){
-    lockErr.textContent = 'You need to complete the previous stage before accessing this one.';
-    lockErr.style.display = 'block'; return false;
-  }
-  lockErr.style.display = 'none'; return true;
+  document.getElementById('btn-start').disabled = !name || sv === '';
 }
 
 function startQuestionnaire(){
@@ -307,7 +429,6 @@ function startQuestionnaire(){
   var sv = document.getElementById('r-stage').value;
   var err = document.getElementById('err-details');
   if(!name || sv === ''){ err.classList.add('show'); return; }
-  if(!validateStageSelect()) return;
   err.classList.remove('show');
   session.respondent = {
     project: document.getElementById('r-project').value.trim(),
@@ -317,7 +438,7 @@ function startQuestionnaire(){
   };
   session.currentStageIdx = parseInt(sv);
   session.currentQPos = 0;
-  session.answers = new Array(31).fill(null);
+  initAnswers();
   renderQuestion();
   showScreen('screen-question');
 }
@@ -328,70 +449,125 @@ function renderQuestion(){
   var q = QUESTIONS[qIdx];
   var pos = session.currentQPos;
   var total = stage.qs.length;
-  document.getElementById('prog-fill').style.width = Math.round((pos/total)*100)+'%';
+  var current = session.answers[qIdx];
+
+  var answered = stage.qs.filter(function(qi){return session.answers[qi] && session.answers[qi].v !== null;}).length;
+  document.getElementById('prog-fill').style.width = Math.round((answered/total)*100)+'%';
   document.getElementById('prog-stage-label').textContent = stage.short+': '+stage.name;
   document.getElementById('prog-fraction').textContent = 'Question '+(pos+1)+' of '+total;
   document.getElementById('q-stage-pill').textContent = stage.short;
   document.getElementById('q-eyebrow').textContent = 'Question '+(pos+1)+' of '+total;
   document.getElementById('q-text').textContent = q.text;
+
+  var hintEl = document.getElementById('q-hint');
+  if(q.hint){ hintEl.textContent = q.hint; hintEl.style.display='block'; }
+  else { hintEl.style.display='none'; }
+
   document.getElementById('err-answer').classList.remove('show');
   document.getElementById('q-back-btn').textContent = pos===0 ? '← Back to details' : '← Previous question';
+
+  // Render Likert options
   var container = document.getElementById('resp-options');
   container.innerHTML = '';
-  var opts = ['Yes','No',"I don't know"];
-  if(q.has_nr) opts.push('Not Relevant');
-  var vals = ['yes','no','idk','nr'];
-  var current = session.answers[qIdx];
-  opts.forEach(function(label,i){
-    var val = vals[i];
+  q.opts.forEach(function(label, i){
+    var val = i+1;
     var btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'resp-btn'+(current===val?' sel':'');
-    var dot = document.createElement('span'); dot.className = 'resp-dot';
-    var span = document.createElement('span'); span.textContent = label;
-    btn.appendChild(dot); btn.appendChild(span);
-    btn.onclick = (function(v){return function(){selectAnswer(v);};})(val);
+    btn.className = 'resp-btn' + (current && current.v === val ? ' sel' : '');
+    btn.setAttribute('data-val', val);
+    var num = document.createElement('span');
+    num.className = 'resp-num';
+    num.textContent = val;
+    var span = document.createElement('span');
+    span.textContent = label;
+    btn.appendChild(num);
+    btn.appendChild(span);
+    btn.onclick = (function(v){ return function(){ selectAnswer(v); }; })(val);
     container.appendChild(btn);
   });
+
+  // NR option
+  var nrWrap = document.getElementById('resp-nr-wrap');
+  nrWrap.innerHTML = '';
+  if(q.has_nr){
+    var nrBtn = document.createElement('button');
+    nrBtn.type = 'button';
+    nrBtn.className = 'resp-btn-nr' + (current && current.v === 'nr' ? ' sel' : '');
+    nrBtn.setAttribute('data-val', 'nr');
+    nrBtn.textContent = 'Not Relevant';
+    nrBtn.onclick = function(){ selectAnswer('nr'); };
+    nrWrap.appendChild(nrBtn);
+  }
+
+  // Notes
+  document.getElementById('q-notes').value = current ? (current.note || '') : '';
+
   var nextBtn = document.getElementById('q-next-btn');
   var isLast = pos === total-1;
   nextBtn.textContent = isLast ? 'Submit stage ✓' : 'Next →';
-  nextBtn.disabled = isLast && session.answers[qIdx] === null;
+  nextBtn.disabled = isLast && (!current || current.v === null);
 }
 
 function selectAnswer(val){
   var stage = STAGES[session.currentStageIdx];
   var qIdx = stage.qs[session.currentQPos];
-  session.answers[qIdx] = val;
-  document.querySelectorAll('.resp-btn').forEach(function(btn,i){
-    btn.classList.toggle('sel',['yes','no','idk','nr'][i]===val);
+  var existingNote = session.answers[qIdx] ? session.answers[qIdx].note : '';
+  session.answers[qIdx] = {v: val, note: existingNote};
+
+  // Update button visual states without full re-render
+  document.querySelectorAll('#resp-options .resp-btn').forEach(function(btn){
+    btn.classList.toggle('sel', parseInt(btn.getAttribute('data-val')) === val);
   });
+  var nrBtn = document.querySelector('#resp-nr-wrap .resp-btn-nr');
+  if(nrBtn) nrBtn.classList.toggle('sel', val === 'nr');
+
   document.getElementById('err-answer').classList.remove('show');
-  var answered = stage.qs.filter(function(qi){return session.answers[qi]!==null;}).length;
-  document.getElementById('prog-fill').style.width = Math.round((answered/stage.qs.length)*100)+'%';
-  if(session.currentQPos===stage.qs.length-1) document.getElementById('q-next-btn').disabled = false;
+
+  var total = stage.qs.length;
+  var answered = stage.qs.filter(function(qi){return session.answers[qi] && session.answers[qi].v !== null;}).length;
+  document.getElementById('prog-fill').style.width = Math.round((answered/total)*100)+'%';
+
+  if(session.currentQPos === total-1){
+    document.getElementById('q-next-btn').disabled = false;
+  }
+}
+
+function updateCurrentNote(value){
+  var stage = STAGES[session.currentStageIdx];
+  var qIdx = stage.qs[session.currentQPos];
+  session.answers[qIdx].note = value;
 }
 
 function goNext(){
   var stage = STAGES[session.currentStageIdx];
   var qIdx = stage.qs[session.currentQPos];
-  if(session.answers[qIdx]===null){ document.getElementById('err-answer').classList.add('show'); return; }
+  if(!session.answers[qIdx] || session.answers[qIdx].v === null){
+    document.getElementById('err-answer').classList.add('show');
+    return;
+  }
   if(session.currentQPos < stage.qs.length-1){
-    session.currentQPos++; renderQuestion(); window.scrollTo(0,0);
+    session.currentQPos++;
+    renderQuestion();
+    window.scrollTo(0,0);
   } else {
     submitStage();
   }
 }
 
 function goBack(){
-  if(session.currentQPos > 0){ session.currentQPos--; renderQuestion(); window.scrollTo(0,0); }
-  else { showScreen('screen-details'); }
+  if(session.currentQPos > 0){
+    session.currentQPos--;
+    renderQuestion();
+    window.scrollTo(0,0);
+  } else {
+    showScreen('screen-details');
+  }
 }
 
 async function submitStage(){
   var nextBtn = document.getElementById('q-next-btn');
   nextBtn.disabled = true;
-  nextBtn.textContent = 'Saving�';
+  nextBtn.textContent = 'Saving…';
   try{
     var res = await fetch((API_BASE||'')+'/api/responses',{
       method:'POST',
@@ -423,20 +599,30 @@ async function submitStage(){
 
 function showStageComplete(){
   var stage = STAGES[session.currentStageIdx];
-  var isLast = session.currentStageIdx === 5;
+  var nextOpenStages = session.openStages.filter(function(si){
+    return si > session.currentStageIdx && session.completedStages.indexOf(si) === -1;
+  });
+  var hasNext = nextOpenStages.length > 0;
   document.getElementById('stage-complete-title').textContent = 'You have completed '+stage.short;
-  document.getElementById('stage-complete-msg').textContent = isLast
-    ? 'You have completed all stages. Thank you for your contribution.'
+  document.getElementById('stage-complete-msg').textContent = !hasNext
+    ? 'Thank you for completing this stage. You may now close this page or end the survey.'
     : 'You have completed '+stage.name+'. Would you like to proceed to the next stage?';
   var nextBtn = document.getElementById('btn-next-stage');
-  nextBtn.style.display = isLast ? 'none' : '';
-  if(!isLast) nextBtn.textContent = 'Proceed to '+STAGES[session.currentStageIdx+1].short+' →';
+  if(hasNext){
+    nextBtn.style.display = '';
+    nextBtn.textContent = 'Proceed to Stage '+(nextOpenStages[0]+1)+' →';
+    nextBtn._nextStageIdx = nextOpenStages[0];
+  } else {
+    nextBtn.style.display = 'none';
+  }
   showScreen('screen-stage-complete');
 }
 
 function proceedNextStage(){
-  session.currentStageIdx++;
+  var nextBtn = document.getElementById('btn-next-stage');
+  session.currentStageIdx = nextBtn._nextStageIdx;
   session.currentQPos = 0;
+  initAnswers();
   renderQuestion();
   showScreen('screen-question');
 }
