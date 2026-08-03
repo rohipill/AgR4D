@@ -410,10 +410,11 @@ function clearForm(){
   addPartnerEntry();
 }
 
-function addPartnerEntry(){
+function addPartnerEntry(org, email, token){
   var container=document.getElementById('partner-entries');
   var div=document.createElement('div');
   div.className='partner-entry';
+  if(token) div.setAttribute('data-partner-token', token);
 
   var orgWrap=document.createElement('div');
   var orgLabel=document.createElement('label');
@@ -422,6 +423,7 @@ function addPartnerEntry(){
   var orgInput=document.createElement('input');
   orgInput.type='text';
   orgInput.className='pe-org';
+  if(org) orgInput.value=org;
   orgWrap.appendChild(orgLabel);
   orgWrap.appendChild(orgInput);
 
@@ -433,6 +435,7 @@ function addPartnerEntry(){
   emailInput.type='email';
   emailInput.className='pe-email';
   emailInput.placeholder='optional';
+  if(email) emailInput.value=email;
   emailWrap.appendChild(emailLabel);
   emailWrap.appendChild(emailInput);
 
@@ -473,35 +476,74 @@ async function generateLinks(){
   }
   var project=document.getElementById('fac-project').value.trim();
   var entries=document.querySelectorAll('#partner-entries .partner-entry');
-  var partners=[];
-  entries.forEach(function(row){
-    var org=row.querySelector('.pe-org').value.trim();
-    var email=row.querySelector('.pe-email').value.trim();
-    if(org) partners.push({org:org,email:email});
-  });
   var errP=document.getElementById('err-partners');
-  if(!project||!partners.length){errP.classList.add('show');return;}
+  if(!project){errP.classList.add('show');return;}
   errP.classList.remove('show');
   document.getElementById('err-api').classList.remove('show');
 
   var btn=document.getElementById('btn-generate');
   btn.disabled=true; btn.textContent='Saving…';
+
+  var existingProjectId=getProjectId();
+
   try{
-    var data=await apiFetch('/api/projects',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        title:project,
-        start_date:document.getElementById('fac-start').value,
-        end_date:document.getElementById('fac-end').value,
-        funder:document.getElementById('fac-funder').value.trim(),
-        budget_usd:document.getElementById('fac-budget').value.trim(),
-        open_stages:getOpenStages(),
-        partners:partners
-      })
-    });
-    setProjectId(data.project_id);
-    displayLinks(data.project_id, data.partners, project);
+    if(existingProjectId){
+      /* Existing project — only create NEW partners (rows without a stored token) */
+      var existingPartners=[];
+      var newPartnerDefs=[];
+      entries.forEach(function(row){
+        var org=row.querySelector('.pe-org').value.trim();
+        var email=row.querySelector('.pe-email').value.trim();
+        var token=row.getAttribute('data-partner-token');
+        if(!org) return;
+        if(token){
+          existingPartners.push({organisation_name:org,email:email,token:token});
+        } else {
+          newPartnerDefs.push({org:org,email:email,_row:row});
+        }
+      });
+      if(!existingPartners.length&&!newPartnerDefs.length){errP.classList.add('show');return;}
+      var allPartners=existingPartners.slice();
+      if(newPartnerDefs.length){
+        var newData=await apiFetch('/api/partners',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({project_id:existingProjectId,partners:newPartnerDefs.map(function(p){return{org:p.org,email:p.email};})})
+        });
+        newData.partners.forEach(function(p,i){
+          if(newPartnerDefs[i]) newPartnerDefs[i]._row.setAttribute('data-partner-token',p.token);
+        });
+        allPartners=allPartners.concat(newData.partners);
+      }
+      displayLinks(existingProjectId,allPartners,project);
+    } else {
+      /* New project */
+      var partners=[];
+      entries.forEach(function(row){
+        var org=row.querySelector('.pe-org').value.trim();
+        var email=row.querySelector('.pe-email').value.trim();
+        if(org) partners.push({org:org,email:email,_row:row});
+      });
+      if(!partners.length){errP.classList.add('show');return;}
+      var data=await apiFetch('/api/projects',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          title:project,
+          start_date:document.getElementById('fac-start').value,
+          end_date:document.getElementById('fac-end').value,
+          funder:document.getElementById('fac-funder').value.trim(),
+          budget_usd:document.getElementById('fac-budget').value.trim(),
+          open_stages:getOpenStages(),
+          partners:partners.map(function(p){return{org:p.org,email:p.email};})
+        })
+      });
+      setProjectId(data.project_id);
+      data.partners.forEach(function(p,i){
+        if(partners[i]) partners[i]._row.setAttribute('data-partner-token',p.token);
+      });
+      displayLinks(data.project_id,data.partners,project);
+    }
   }catch(e){
     var errA=document.getElementById('err-api');
     errA.textContent='Error: '+e.message;
@@ -901,11 +943,7 @@ window.addEventListener('DOMContentLoaded',async function(){
         if(data.partners&&data.partners.length){
           document.getElementById('partner-entries').innerHTML='';
           data.partners.forEach(function(p){
-            addPartnerEntry();
-            var entries=document.querySelectorAll('#partner-entries .partner-entry');
-            var last=entries[entries.length-1];
-            last.querySelector('.pe-org').value=p.organisation_name||'';
-            last.querySelector('.pe-email').value=p.email||'';
+            addPartnerEntry(p.organisation_name||'', p.email||'', p.token||'');
           });
           displayLinks(project_id, data.partners, data.title||'');
         }
