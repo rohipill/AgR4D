@@ -19,7 +19,6 @@ module.exports = async function handler(req, res) {
     const partnerData = partners.map(p => ({
       project_id,
       organisation_name: p.org,
-      email: p.email || '',
       token: randomBytes(16).toString('hex')
     }));
 
@@ -31,7 +30,6 @@ module.exports = async function handler(req, res) {
         created.push({
           partner_id: rec.id,
           organisation_name: batch[j].organisation_name,
-          email: batch[j].email,
           token: batch[j].token
         });
       });

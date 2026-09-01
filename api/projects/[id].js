@@ -10,13 +10,12 @@ module.exports = async function handler(req, res) {
     const [project, partnersResult] = await Promise.all([
       getRecord('Projects', id),
       getRecords('Partners', `{project_id}="${id}"`,
-        ['organisation_name', 'email', 'token'])
+        ['organisation_name', 'token'])
     ]);
 
     const partners = partnersResult.records.map(r => ({
       partner_id: r.id,
       organisation_name: r.fields.organisation_name || '',
-      email: r.fields.email || '',
       token: r.fields.token || ''
     }));
 

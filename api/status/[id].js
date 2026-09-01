@@ -13,7 +13,7 @@ module.exports = async function handler(req, res) {
   try {
     const [partnersResult, responsesResult] = await Promise.all([
       getRecords('Partners', `{project_id}="${id}"`,
-        ['organisation_name', 'email', 'token']),
+        ['organisation_name', 'token']),
       getRecords('Responses', `{project_id}="${id}"`,
         ['token', 'stage_index'])
     ]);
@@ -27,7 +27,6 @@ module.exports = async function handler(req, res) {
 
     const status = partnersResult.records.map(r => ({
       organisation_name: r.fields.organisation_name || '',
-      email: r.fields.email || '',
       completed_stages: completedByToken[r.fields.token] || []
     }));
 
