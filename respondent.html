@@ -489,9 +489,11 @@ function buildStageOptions(){
     if(session.completedStages.indexOf(i) > -1) continue; // already completed
     var opt = document.createElement('option');
     opt.value = i;
-    // Sequential lock: stage i requires stage i-1 to be completed (except stage 0)
-    var seqOk = (i === 0) || (session.completedStages.indexOf(i-1) > -1);
-    opt.textContent = 'Stage '+(i+1)+': '+STAGES[i].name + (seqOk ? '' : ' — complete Stage '+i+' first');
+    // Sequential lock: stage i requires the nearest lower open stage to be completed
+    var prevOpen = -1;
+    for(var p=i-1;p>=0;p--){ if(session.openStages.indexOf(p)>-1){ prevOpen=p; break; } }
+    var seqOk = (prevOpen === -1) || (session.completedStages.indexOf(prevOpen) > -1);
+    opt.textContent = 'Stage '+(i+1)+': '+STAGES[i].name + (seqOk ? '' : ' — complete Stage '+(prevOpen+1)+' first');
     opt.disabled = !seqOk;
     select.appendChild(opt);
   }
