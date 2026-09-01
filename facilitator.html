@@ -414,7 +414,7 @@ async function loadProjectList(){
       card.innerHTML=
         '<div class="proj-card-body">'+
           '<div class="proj-card-title">'+escHtml(p.title)+'</div>'+
-          (meta.length?'<div class="proj-card-meta">'+escHtml(meta.join(' &mdash; '))+'</div>':'')+
+          (meta.length?'<div class="proj-card-meta">'+meta.map(escHtml).join(' &mdash; ')+'</div>':'')+
         '</div>'+
         '<span class="proj-card-arrow">&#8250;</span>';
       card.onclick=(function(pid){return function(){openProject(pid);};})(p.project_id);
