@@ -56,14 +56,11 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 /* Generated links */
 .link-block{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-md);padding:.85rem 1rem;margin-bottom:.6rem}
 .link-org{font-size:13px;font-weight:500;color:var(--text);margin-bottom:.25rem}
-.link-email-label{font-size:11px;color:var(--text-hint);margin-bottom:.35rem}
 .link-url{font-size:11px;color:var(--text-muted);word-break:break-all;font-family:monospace;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.4rem .6rem;display:block;margin-bottom:.5rem}
 .link-actions{display:flex;gap:8px;flex-wrap:wrap}
 .copy-btn{font-size:12px;padding:6px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--text-muted);transition:all .15s;min-height:34px}
 .copy-btn:hover{border-color:var(--border-strong);color:var(--text)}
 .copy-btn.copied{border-color:var(--green-border);color:var(--green);background:var(--green-bg)}
-.email-btn{font-size:12px;padding:6px 12px;border:1px solid var(--blue-border);border-radius:var(--radius-sm);background:var(--blue-bg);cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--blue);transition:all .15s;min-height:34px;text-decoration:none;display:inline-flex;align-items:center}
-.email-btn:hover{opacity:.85}
 /* Tabs */
 .tab-row{display:flex;border-bottom:1px solid var(--border);margin-bottom:1.5rem;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .tab-row::-webkit-scrollbar{display:none}
@@ -138,8 +135,8 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 <body>
 <div class="shell">
   <div class="app-header">
-    <img src="GFAIR combined logo.png" alt="GFAIR logo" style="max-height:80px;width:auto;margin:0 auto 1rem;display:block">
-    <div class="app-eyebrow">AgR4D</div>
+    <img src="GFAIR combined logo.png" alt="GFAIR logo" style="max-height:110px;width:auto;margin:0 auto 1rem;display:block">
+    <div class="app-eyebrow">Agrifood RI4D</div>
     <div class="app-title">Partnership Assessment Tool</div>
   </div>
 
@@ -215,7 +212,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 
       <div class="card" style="margin-top:1rem">
         <h3 style="font-size:16px;font-weight:500;margin-bottom:.25rem">Partner organisations</h3>
-        <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem">Add each partner organisation and their email address. A unique respondent link will be generated for each.</p>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem">Add each partner organisation. A unique respondent link will be generated for each.</p>
         <div id="partner-entries"></div>
         <button class="btn btn-sm" onclick="addPartnerEntry()" style="margin-top:.25rem">+ Add partner</button>
         <div class="alert-error" id="err-partners" style="margin-top:.75rem">Please enter a project title and at least one partner organisation.</div>
@@ -229,7 +226,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
       <div id="links-output" style="display:none;margin-top:1rem">
         <div class="card">
           <h3 style="font-size:16px;font-weight:500;margin-bottom:.25rem">Respondent links</h3>
-          <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem">Copy each link or open directly in your email client.</p>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem">Copy and share each link directly with your partner organisation.</p>
           <div id="links-list"></div>
         </div>
       </div>
@@ -249,7 +246,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
       <div id="dash-empty" class="alert alert-info">No responses yet. Indicators will appear here once partners complete the questionnaire.</div>
       <div id="dash-body" style="display:none">
         <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.25rem;font-size:13px;color:var(--text-muted)">
-          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block"></span>All responses satisfactory (options 1&ndash;2)</span>
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block"></span>All scorable responses satisfactory (top 2 options)</span>
           <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:var(--red);display:inline-block"></span>One or more responses need attention (options 3&ndash;5)</span>
         </div>
         <div id="dash-indicators"></div>
@@ -271,36 +268,36 @@ var STAGES=[
 ];
 
 var QUESTIONS=[
-  {opts:["At the start","Somewhat early","Midway","Near the end","After completion"]},
-  {opts:["Always","Most of the time","Sometimes","Rarely","Never"]},
-  {opts:["Always","Most of the time","Sometimes","Rarely","Never"]},
-  {opts:["Full extent","Large extent","Moderate extent","Small extent","Not considered"]},
-  {opts:["Full extent","Large extent","Moderate extent","Small extent","Not considered"]},
-  {opts:["Full extent","Large extent","Moderate extent","Small extent","Not considered"]},
-  {opts:["Full extent","Large extent","Moderate extent","Small extent","Not considered"]},
-  {opts:["Early enough","Just in time","With limited time","Too late","Not discussed"]},
-  {opts:["Very fair","Fair","Somewhat fair","Unfair","Very unfair"]},
-  {opts:["All","Most","About half","A few","Not recognised"]},
-  {opts:["Full extent","Large extent","Moderate extent","Small extent","Not involved"]},
-  {opts:["Full","Significant","Moderate","Negligible","No access"]},
-  {opts:["Always","Most of the time","Sometimes","Rarely","Never"]},
-  {opts:["Very appropriate","Appropriate","Somewhat appropriate","Inappropriate","Very inappropriate"]},
-  {opts:["Full extent","Large extent","Moderate extent","Small extent","Could not contribute"]},
-  {opts:["Full extent","Large extent","Moderate extent","Small extent","Could not contribute"]},
-  {opts:["Well in advance","Just enough time","Very little","No time","Not shared"]},
-  {opts:["Full extent","Large extent","Moderate extent","Small extent","Not discussed"]},
-  {opts:["All","Most","About half","A few","None"]},
-  {opts:["Full extent","Large extent","Moderate extent","Small extent","Not involved"]},
-  {opts:["Very easily accessible","Fairly easily accessible","Somewhat easily accessible","Difficult to access","Not accessible"]},
-  {opts:["Very easily accessible","Fairly easily accessible","Somewhat easily accessible","Difficult to access","Not accessible"]},
-  {opts:["Very satisfied","Satisfied","Somewhat satisfied","Unsatisfied","Very unsatisfied"]},
-  {opts:["All","Most","About half","A few","None"]},
-  {opts:["Full extent","Large extent","Moderate extent","Small extent","Not involved"]},
-  {opts:["Full extent","Large extent","Moderate extent","Small extent","No difference"]},
-  {opts:["All","Most","About half","A few","None"]},
-  {opts:["Full extent","Large extent","Moderate extent","Small extent","Could not contribute"]},
-  {opts:["Full extent","Large extent","Moderate extent","Small extent","Not involved"]},
-  {opts:["Full extent","Large extent","Moderate extent","Small extent","Not involved"]}
+  {opts:["At the start","Somewhat early","Midway","Near the end","After completion"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
+  {opts:["Always","Most of the time","Sometimes","Rarely","Never"],tiers:["sat","sat","unsat","unsat","unsat"],special:[]},
+  {opts:["Always","Most of the time","Sometimes","Rarely","Never"],tiers:["sat","sat","unsat","unsat","unsat"],special:[]},
+  {opts:["Full extent","Large extent","Moderate extent","Small extent","Not considered"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
+  {opts:["Full extent","Large extent","Moderate extent","Small extent","Not considered"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
+  {opts:["Full extent","Large extent","Moderate extent","Small extent","Not considered"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
+  {opts:["Full extent","Large extent","Moderate extent","Small extent","Not considered"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
+  {opts:["Early enough","Just in time","With limited time","Too late","Not discussed"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
+  {opts:["Very fair","Fair","Somewhat fair","Unfair","Very unfair"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"Not Relevant",val:"nr",tier:"na"},{label:"No discussions took place",val:"dep",tier:"dep"}]},
+  {opts:["All","Most","About half","A few","Not recognised"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
+  {opts:["Full extent","Large extent","Moderate extent","Small extent","Not involved"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
+  {opts:["Full","Significant","Moderate","Negligible","No access"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
+  {opts:["Always","Most of the time","Sometimes","Rarely","Never"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"No challenges arose",val:"pos-neutral",tier:"pos-neutral"},{label:"I don't know",val:"idk",tier:"idk"}]},
+  {opts:["Very appropriate","Appropriate","Somewhat appropriate","Inappropriate","Very inappropriate"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"I don't know",val:"idk",tier:"idk"}]},
+  {opts:["Full extent","Large extent","Moderate extent","Small extent","Could not contribute"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
+  {opts:["Full extent","Large extent","Moderate extent","Small extent","Could not contribute"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
+  {opts:["Well in advance","Just enough time","Very little","No time","Not shared"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
+  {opts:["Full extent","Large extent","Moderate extent","Small extent","Not discussed"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"No shortcomings arose",val:"pos-neutral",tier:"pos-neutral"},{label:"I don't know",val:"idk",tier:"idk"}]},
+  {opts:["All","Most","About half","A few","None"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
+  {opts:["Full extent","Large extent","Moderate extent","Small extent","Not involved"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
+  {opts:["Very easily accessible","Fairly easily accessible","Somewhat easily accessible","Difficult to access","Not accessible"],tiers:["sat","sat","unsat","unsat","unsat"],special:[]},
+  {opts:["Very easily accessible","Fairly easily accessible","Somewhat easily accessible","Difficult to access","Not accessible"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"I don't know",val:"idk",tier:"idk"}]},
+  {opts:["Very satisfied","Satisfied","Somewhat satisfied","Unsatisfied","Very unsatisfied"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
+  {opts:["All","Most","About half","A few","None"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
+  {opts:["Full extent","Large extent","Moderate extent","Small extent","Not involved"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
+  {opts:["Full extent","Large extent","Moderate extent","Small extent","No difference"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
+  {opts:["All","Most","About half","A few","None"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
+  {opts:["Full extent","Large extent","Moderate extent","Small extent","Could not contribute"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
+  {opts:["Full extent","Large extent","Moderate extent","Small extent","Not involved"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"I don't know",val:"idk",tier:"idk"}]},
+  {opts:["Full extent","Large extent","Moderate extent","Small extent","Not involved"],tiers:["sat","sat","unsat","unsat","unsat"],special:[{label:"I don't know",val:"idk",tier:"idk"}]}
 ];
 
 var INDICATORS=[
@@ -478,7 +475,7 @@ async function loadProject(project_id){
       if(data.partners&&data.partners.length){
         document.getElementById('partner-entries').innerHTML='';
         data.partners.forEach(function(p){
-          addPartnerEntry(p.organisation_name||'', p.email||'', p.token||'');
+          addPartnerEntry(p.organisation_name||'', p.token||'');
         });
         displayLinks(project_id, data.partners, data.title||'');
       }
@@ -532,7 +529,7 @@ function clearForm(){
   resetDetailPanel();
 }
 
-function addPartnerEntry(org, email, token){
+function addPartnerEntry(org, token){
   var container=document.getElementById('partner-entries');
   var div=document.createElement('div');
   div.className='partner-entry';
@@ -549,18 +546,6 @@ function addPartnerEntry(org, email, token){
   orgWrap.appendChild(orgLabel);
   orgWrap.appendChild(orgInput);
 
-  var emailWrap=document.createElement('div');
-  var emailLabel=document.createElement('label');
-  emailLabel.textContent='Email address';
-  emailLabel.style.cssText='font-size:11px;color:var(--text-hint);font-weight:500;display:block;margin-bottom:3px;letter-spacing:.02em';
-  var emailInput=document.createElement('input');
-  emailInput.type='email';
-  emailInput.className='pe-email';
-  emailInput.placeholder='optional';
-  if(email) emailInput.value=email;
-  emailWrap.appendChild(emailLabel);
-  emailWrap.appendChild(emailInput);
-
   var removeBtn=document.createElement('button');
   removeBtn.type='button';
   removeBtn.className='remove-btn';
@@ -568,7 +553,6 @@ function addPartnerEntry(org, email, token){
   removeBtn.onclick=function(){removePartnerEntry(removeBtn);};
 
   div.appendChild(orgWrap);
-  div.appendChild(emailWrap);
   div.appendChild(removeBtn);
   container.appendChild(div);
 }
@@ -613,11 +597,10 @@ async function generateLinks(){
       var existingPartners=[],newPartnerDefs=[];
       entries.forEach(function(row){
         var org=row.querySelector('.pe-org').value.trim();
-        var email=row.querySelector('.pe-email').value.trim();
         var token=row.getAttribute('data-partner-token');
         if(!org) return;
-        if(token) existingPartners.push({organisation_name:org,email:email,token:token});
-        else newPartnerDefs.push({org:org,email:email,_row:row});
+        if(token) existingPartners.push({organisation_name:org,token:token});
+        else newPartnerDefs.push({org:org,_row:row});
       });
       if(!existingPartners.length&&!newPartnerDefs.length){errP.classList.add('show');return;}
       var allPartners=existingPartners.slice();
@@ -625,7 +608,7 @@ async function generateLinks(){
         var newData=await apiFetch('/api/partners',{
           method:'POST',
           headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({project_id:existingProjectId,partners:newPartnerDefs.map(function(p){return{org:p.org,email:p.email};})})
+          body:JSON.stringify({project_id:existingProjectId,partners:newPartnerDefs.map(function(p){return{org:p.org};})})
         });
         newData.partners.forEach(function(p,i){
           if(newPartnerDefs[i]) newPartnerDefs[i]._row.setAttribute('data-partner-token',p.token);
@@ -637,8 +620,7 @@ async function generateLinks(){
       var partners=[];
       entries.forEach(function(row){
         var org=row.querySelector('.pe-org').value.trim();
-        var email=row.querySelector('.pe-email').value.trim();
-        if(org) partners.push({org:org,email:email,_row:row});
+        if(org) partners.push({org:org,_row:row});
       });
       if(!partners.length){errP.classList.add('show');return;}
       var data=await apiFetch('/api/projects',{
@@ -651,7 +633,7 @@ async function generateLinks(){
           funder:document.getElementById('fac-funder').value.trim(),
           budget_usd:document.getElementById('fac-budget').value.trim(),
           open_stages:getOpenStages(),
-          partners:partners.map(function(p){return{org:p.org,email:p.email};})
+          partners:partners.map(function(p){return{org:p.org};})
         })
       });
       setProjectId(data.project_id);
@@ -675,27 +657,14 @@ function displayLinks(project_id, partners, projectTitle){
   listEl.innerHTML='';
   partners.forEach(function(p){
     var orgName=p.organisation_name||p.org||'';
-    var email=p.email||'';
     var url=base+'?token='+encodeURIComponent(p.token);
     var eid='url-'+encodeURIComponent(orgName);
-    var subject=encodeURIComponent('AgR4D Partnership Assessment Tool — '+projectTitle);
-    var bodyText='Dear '+orgName+',\n\nYou are invited to complete the AgR4D Partnership Assessment questionnaire for the project: '+projectTitle+'.\n\nPlease use the following link to access your personalised questionnaire:\n'+url+'\n\nThank you for your participation.\n\nBest regards';
-    var mailtoHref=email
-      ?'mailto:'+email+'?subject='+subject+'&body='+encodeURIComponent(bodyText)
-      :'mailto:?subject='+subject+'&body='+encodeURIComponent(bodyText);
-
     var div=document.createElement('div');
     div.className='link-block';
     var orgDiv=document.createElement('div');
     orgDiv.className='link-org';
     orgDiv.textContent=orgName;
     div.appendChild(orgDiv);
-    if(email){
-      var emailDiv=document.createElement('div');
-      emailDiv.className='link-email-label';
-      emailDiv.textContent=email;
-      div.appendChild(emailDiv);
-    }
     var codeEl=document.createElement('code');
     codeEl.className='link-url';
     codeEl.id=eid;
@@ -708,12 +677,6 @@ function displayLinks(project_id, partners, projectTitle){
     copyBtn.textContent='Copy link';
     copyBtn.onclick=(function(e,b){return function(){copyLink(e,b);};})(eid,copyBtn);
     actionsDiv.appendChild(copyBtn);
-    var emailA=document.createElement('a');
-    emailA.className='email-btn';
-    emailA.href=mailtoHref;
-    emailA.target='_blank';
-    emailA.textContent='Open in email client';
-    actionsDiv.appendChild(emailA);
     div.appendChild(actionsDiv);
     listEl.appendChild(div);
   });
@@ -753,7 +716,7 @@ async function renderStatus(){
           ?'<td><span class="badge-done">&#10003; Done</span></td>'
           :'<td><span class="badge-pending">Pending</span></td>';
       }).join('');
-      rows+='<tr><td>'+escHtml(p.organisation_name)+(p.email?'<br><span style="font-size:11px;color:var(--text-hint);font-weight:400">'+escHtml(p.email)+'</span>':'')+'</td>'+cells+'</tr>';
+      rows+='<tr><td>'+escHtml(p.organisation_name)+'</td>'+cells+'</tr>';
     });
     var totalExpected=data.status.length*STAGES.length;
     var totalDone=data.status.reduce(function(acc,p){return acc+p.completed_stages.length;},0);
@@ -778,9 +741,10 @@ function getStageForQ(qIdx){
 function getAnswerV(ans){
   if(ans===null||ans===undefined) return null;
   if(typeof ans==='object') return ans.v;
+  // Legacy top-level string formats
   if(ans==='yes') return 1;
   if(ans==='no') return 4;
-  if(ans==='idk') return 3;
+  if(ans==='idk') return 3; // legacy idk maps to position 3 (unsat)
   if(ans==='nr') return 'nr';
   return null;
 }
@@ -790,30 +754,60 @@ function getAnswerNote(ans){
   return '';
 }
 
+function getAnswerTier(qIdx, v){
+  if(v===null||v===undefined) return null;
+  if(typeof v==='number'){
+    var q=QUESTIONS[qIdx];
+    if(q&&q.tiers&&v>=1&&v<=q.tiers.length) return q.tiers[v-1];
+    return v<=2?'sat':'unsat';
+  }
+  if(v==='nr') return 'na';
+  if(v==='idk') return 'idk';
+  if(v==='pos-neutral') return 'pos-neutral';
+  if(v==='dep') return 'dep';
+  return null;
+}
+
 function getAnswerLabel(qIdx, v){
   if(v==='nr') return 'Not Relevant';
+  if(v==='idk') return "I don't know";
+  if(v==='dep') return 'No discussions took place';
+  if(v==='pos-neutral'){
+    var q0=QUESTIONS[qIdx];
+    if(q0&&q0.special){
+      for(var si=0;si<q0.special.length;si++){if(q0.special[si].val==='pos-neutral') return q0.special[si].label;}
+    }
+    return 'No challenges/shortcomings arose';
+  }
   var q=QUESTIONS[qIdx];
-  if(q&&typeof v==='number'&&v>=1&&v<=5) return v+'. '+q.opts[v-1];
+  if(q&&typeof v==='number'&&v>=1&&v<=q.opts.length) return q.opts[v-1];
   return String(v);
 }
 
 function computeIndicator(qIdx){
   var stageIdx=getStageForQ(qIdx);
-  var relevant=[];
+  var all=[];
   _dashResponses.forEach(function(r){
     if(r.stageIdx!==stageIdx) return;
     var ans=r.answers[qIdx];
     if(ans===null||ans===undefined) return;
     var v=getAnswerV(ans);
     if(v===null) return;
-    relevant.push({respondent:r.respondent,v:v,note:getAnswerNote(ans)});
+    var tier=getAnswerTier(qIdx,v);
+    if(!tier) return;
+    all.push({respondent:r.respondent,v:v,tier:tier,note:getAnswerNote(ans)});
   });
-  if(!relevant.length) return{color:'none',satisfactory:null,total:null,responses:[]};
-  var active=relevant.filter(function(r){return r.v!=='nr';});
-  if(!active.length) return{color:'none',satisfactory:null,total:null,responses:relevant};
-  var satCount=active.filter(function(r){return typeof r.v==='number'&&r.v<=2;}).length;
-  var hasRed=active.some(function(r){return typeof r.v==='number'&&r.v>=3;});
-  return{color:hasRed?'red':'green',satisfactory:satCount,total:active.length,responses:relevant};
+  var sat=all.filter(function(r){return r.tier==='sat';});
+  var unsat=all.filter(function(r){return r.tier==='unsat';});
+  var naCount=all.filter(function(r){return r.tier==='na';}).length;
+  var idkCount=all.filter(function(r){return r.tier==='idk';}).length;
+  var posNeutralCount=all.filter(function(r){return r.tier==='pos-neutral';}).length;
+  var scorable=sat.length+unsat.length;
+  var color;
+  if(!scorable) color='none'; // No data — every response was excluded
+  else if(unsat.length>0) color='red';
+  else color='green';
+  return{color:color,satisfactory:sat.length,total:scorable,naCount:naCount,idkCount:idkCount,posNeutralCount:posNeutralCount,responses:all};
 }
 
 function getIndNotesKey(){ return 'ar4d_ind_notes_'+(getProjectId()||'default'); }
@@ -889,11 +883,32 @@ async function renderDashboard(){
 
         var metaRow=document.createElement('div');
         metaRow.className='ind-meta-row';
-        if(result.satisfactory!==null){
+        if(result.total>0){
           var propSpan=document.createElement('span');
           propSpan.className='ind-meta-item';
           propSpan.innerHTML='<strong>'+result.satisfactory+' out of '+result.total+'</strong> partners responded positively';
           metaRow.appendChild(propSpan);
+        }
+        if(result.naCount>0){
+          var naSpan=document.createElement('span');
+          naSpan.className='ind-meta-item';
+          naSpan.style.color='var(--text-hint)';
+          naSpan.innerHTML=result.naCount+' partner'+(result.naCount>1?'s':'')+' marked this <em>Not Applicable</em>';
+          metaRow.appendChild(naSpan);
+        }
+        if(result.idkCount>0){
+          var idkSpan=document.createElement('span');
+          idkSpan.className='ind-meta-item';
+          idkSpan.style.color='var(--text-hint)';
+          idkSpan.innerHTML=result.idkCount+' partner'+(result.idkCount>1?'s':'')+' could not assess this (<em>I don\'t know</em>)';
+          metaRow.appendChild(idkSpan);
+        }
+        if(result.posNeutralCount>0){
+          var pnSpan=document.createElement('span');
+          pnSpan.className='ind-meta-item';
+          pnSpan.style.color='var(--text-hint)';
+          pnSpan.innerHTML=result.posNeutralCount+' partner'+(result.posNeutralCount>1?'s':'')+' reported no challenges or shortcomings arose';
+          metaRow.appendChild(pnSpan);
         }
         var statusSpan=document.createElement('span');
         statusSpan.className='ind-meta-item';
@@ -913,10 +928,8 @@ async function renderDashboard(){
           tbl.innerHTML='<thead><tr><th>Respondent</th><th>Organisation</th><th>Response</th><th>Notes</th><th></th></tr></thead>';
           var tbody=document.createElement('tbody');
           result.responses.forEach(function(r){
-            var isSat=typeof r.v==='number'&&r.v<=2;
-            var isUnsat=typeof r.v==='number'&&r.v>=3;
-            var isNR=r.v==='nr';
-            var aCls=isNR?'answer-nr':isSat?'answer-sat':'answer-unsat';
+            var tier=r.tier;
+            var aCls=tier==='sat'?'answer-sat':tier==='unsat'?'answer-unsat':'answer-nr';
             var tr=document.createElement('tr');
             var tdName=document.createElement('td');tdName.textContent=r.respondent.name||'—';
             var tdOrg=document.createElement('td');tdOrg.textContent=r.respondent.org||'—';
@@ -925,7 +938,7 @@ async function renderDashboard(){
             var tdNote=document.createElement('td');
             if(r.note){var nd=document.createElement('span');nd.className='note-text';nd.style.fontStyle='normal';nd.textContent=r.note;tdNote.appendChild(nd);}else{tdNote.textContent='—';}
             var tdAction=document.createElement('td');tdAction.style.cssText='text-align:center;width:36px';
-            if(isUnsat){
+            if(tier==='unsat'){
               var rb=document.createElement('button');
               rb.className='reassign-btn';
               rb.title='Reassign question';

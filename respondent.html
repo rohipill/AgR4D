@@ -112,8 +112,8 @@ textarea.notes-input{font-size:14px;resize:vertical;min-height:68px;padding:8px 
 <body>
 <div class="shell">
   <div class="app-header">
-    <img src="GFAIR combined logo.png" alt="GFAIR logo" style="max-height:80px;width:auto;margin:0 auto 1rem;display:block">
-    <div class="app-eyebrow">AgR4D</div>
+    <img src="GFAIR combined logo.png" alt="GFAIR logo" style="max-height:110px;width:auto;margin:0 auto 1rem;display:block">
+    <div class="app-eyebrow">Agrifood RI4D</div>
     <div class="app-title">Partnership Assessment Tool</div>
   </div>
 
@@ -127,7 +127,7 @@ textarea.notes-input{font-size:14px;resize:vertical;min-height:68px;padding:8px 
         <div class="instruction-item"><span class="instruction-dot"></span><span class="instruction-text">Every partner in a project is required to use a separate questionnaire.</span></div>
         <div class="instruction-item"><span class="instruction-dot"></span><span class="instruction-text">Respond to all questions.</span></div>
         <div class="instruction-item"><span class="instruction-dot"></span><span class="instruction-text">Please indicate <strong>Not Relevant</strong> only if the question is not relevant to your organisation due to its role in the project.</span></div>
-        <div class="instruction-item"><span class="instruction-dot"></span><span class="instruction-text">You can use the Notes field to provide additional information to explain your responses, including the choice of Not Relevant or your dissatisfaction over any aspect of partnership.</span></div>
+        <div class="instruction-item"><span class="instruction-dot"></span><span class="instruction-text">You can use the Notes field to provide additional information to explain your responses, including the choice of Not Relevant, I don't know or your dissatisfaction over any aspect of partnership.</span></div>
       </div>
       <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-md);padding:.85rem 1rem;margin-bottom:1.25rem">
         <div style="font-size:11px;font-weight:500;color:var(--text-hint);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.3rem">Definition</div>
@@ -246,67 +246,127 @@ var STAGES=[
 
 var QUESTIONS=[
   {text:"When was your organisation brought into the scoping process?",
-   opts:["At the start","Somewhat early","Midway","Near the end","After completion"],has_nr:true},
+   opts:["At the start","Somewhat early","Midway","Near the end","After completion"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
   {text:"How regularly did your organisation receive project information in a timely manner?",
-   opts:["Always","Most of the time","Sometimes","Rarely","Never"],has_nr:false},
+   opts:["Always","Most of the time","Sometimes","Rarely","Never"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[]},
   {text:"How often could your organisation freely communicate with the other project partners?",
-   opts:["Always","Most of the time","Sometimes","Rarely","Never"],has_nr:false},
+   opts:["Always","Most of the time","Sometimes","Rarely","Never"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[]},
   {text:"To what extent were your organisation's expectations from the project considered during the project's scoping discussions?",
-   opts:["Full extent","Large extent","Moderate extent","Small extent","Not considered"],has_nr:true},
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Not considered"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
   {text:"To what extent were your organisation's concerns in the project's context considered during scoping discussions?",
-   opts:["Full extent","Large extent","Moderate extent","Small extent","Not considered"],has_nr:true},
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Not considered"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
   {text:"To what extent could your organisation contribute to research design?",
-   opts:["Full extent","Large extent","Moderate extent","Small extent","Not considered"],has_nr:true},
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Not considered"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
   {text:"Considering your organisation's role, to what extent could it contribute to the project until now?",
-   opts:["Full extent","Large extent","Moderate extent","Small extent","Not considered"],has_nr:true},
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Not considered"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
   {text:"When were authorship arrangements discussed with your organisation?",
-   opts:["Early enough","Just in time","With limited time","Too late","Not discussed"],has_nr:true,
+   opts:["Early enough","Just in time","With limited time","Too late","Not discussed"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"Not Relevant",val:"nr",tier:"na"}],
    hint:"Consider if there was enough time for your organisation to meaningfully negotiate and agree on the arrangements."},
   {text:"How fair were the outcomes of authorship/recognition discussions to your organisation?",
-   opts:["Very fair","Fair","Somewhat fair","Unfair","Very unfair"],has_nr:true},
+   opts:["Very fair","Fair","Somewhat fair","Unfair","Very unfair"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"Not Relevant",val:"nr",tier:"na"},{label:"No discussions took place",val:"dep",tier:"dep"}]},
   {text:"How much of your organisation's learning or capacity needs relevant to the project was recognised during the planning process?",
-   opts:["All","Most","About half","A few","Not recognised"],has_nr:true},
+   opts:["All","Most","About half","A few","Not recognised"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
   {text:"To what extent did the partnership involve your organisation in discussions on sustainability or project continuation?",
-   opts:["Full extent","Large extent","Moderate extent","Small extent","Not involved"],has_nr:true},
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Not involved"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
   {text:"How much access to relevant project data did your organisation have?",
-   opts:["Full","Significant","Moderate","Negligible","No access"],has_nr:true},
+   opts:["Full","Significant","Moderate","Negligible","No access"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
   {text:"How often were challenges and changes to the implementation plan discussed openly by project partners?",
-   opts:["Always","Most of the time","Sometimes","Rarely","Never"],has_nr:false},
+   opts:["Always","Most of the time","Sometimes","Rarely","Never"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"No challenges arose",val:"pos-neutral",tier:"pos-neutral"},{label:"I don't know",val:"idk",tier:"idk"}]},
   {text:"How appropriate were the project's implementation approaches to the local or national context?",
-   opts:["Very appropriate","Appropriate","Somewhat appropriate","Inappropriate","Very inappropriate"],has_nr:false},
+   opts:["Very appropriate","Appropriate","Somewhat appropriate","Inappropriate","Very inappropriate"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"I don't know",val:"idk",tier:"idk"}]},
   {text:"To what extent could your organisation contribute to decisions on the project's data interpretation?",
-   opts:["Full extent","Large extent","Moderate extent","Small extent","Could not contribute"],has_nr:true},
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Could not contribute"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
   {text:"To what extent could your organisation contribute to analysing the findings?",
-   opts:["Full extent","Large extent","Moderate extent","Small extent","Could not contribute"],has_nr:true},
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Could not contribute"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
   {text:"How long before external sharing were the project's findings shared with your organisation?",
-   opts:["Well in advance","Just enough time","Very little","No time","Not shared"],has_nr:true,
+   opts:["Well in advance","Just enough time","Very little","No time","Not shared"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"Not Relevant",val:"nr",tier:"na"}],
    hint:"Consider if the time given to your organisation was adequate for reviewing findings and responding."},
   {text:"To what extent did the partners discuss the project's shortcomings?",
-   opts:["Full extent","Large extent","Moderate extent","Small extent","Not discussed"],has_nr:false},
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Not discussed"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"No shortcomings arose",val:"pos-neutral",tier:"pos-neutral"},{label:"I don't know",val:"idk",tier:"idk"}]},
   {text:"How many of the authorship commitments made to your organisation were honoured?",
-   opts:["All","Most","About half","A few","None"],has_nr:true},
+   opts:["All","Most","About half","A few","None"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
   {text:"To what extent did the partnership involve your organisation in communicating the findings?",
-   opts:["Full extent","Large extent","Moderate extent","Small extent","Not involved"],has_nr:true},
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Not involved"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
   {text:"How accessible were the project's outputs to your organisation?",
-   opts:["Very easily accessible","Fairly easily accessible","Somewhat easily accessible","Difficult to access","Not accessible"],has_nr:false},
+   opts:["Very easily accessible","Fairly easily accessible","Somewhat easily accessible","Difficult to access","Not accessible"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[]},
   {text:"Which of the following options best describes the accessibility of project's findings to end users?",
-   opts:["Very easily accessible","Fairly easily accessible","Somewhat easily accessible","Difficult to access","Not accessible"],has_nr:false},
+   opts:["Very easily accessible","Fairly easily accessible","Somewhat easily accessible","Difficult to access","Not accessible"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"I don't know",val:"idk",tier:"idk"}]},
   {text:"Rate your level of satisfaction with the way your organisation was credited in communication outputs.",
-   opts:["Very satisfied","Satisfied","Somewhat satisfied","Unsatisfied","Very unsatisfied"],has_nr:true},
+   opts:["Very satisfied","Satisfied","Somewhat satisfied","Unsatisfied","Very unsatisfied"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
   {text:"How many of the forums where the project findings were presented were accessible to your organisation?",
-   opts:["All","Most","About half","A few","None"],has_nr:true},
+   opts:["All","Most","About half","A few","None"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
   {text:"To what extent was your organisation involved in reviewing the partnership?",
-   opts:["Full extent","Large extent","Moderate extent","Small extent","Not involved"],has_nr:true},
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Not involved"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
   {text:"To what extent did the partnership strengthen its capacity or learning?",
-   opts:["Full extent","Large extent","Moderate extent","Small extent","No difference"],has_nr:true},
+   opts:["Full extent","Large extent","Moderate extent","Small extent","No difference"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
   {text:"How many of the benefit-sharing commitments made to your organisation were fulfilled?",
-   opts:["All","Most","About half","A few","None"],has_nr:true},
+   opts:["All","Most","About half","A few","None"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
   {text:"To what extent could your organisation contribute to discussions on scaling the project's outcomes?",
-   opts:["Full extent","Large extent","Moderate extent","Small extent","Could not contribute"],has_nr:true},
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Could not contribute"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"Not Relevant",val:"nr",tier:"na"}]},
   {text:"To what extent did the partnership involve relevant local partners in shaping the scaling approach?",
-   opts:["Full extent","Large extent","Moderate extent","Small extent","Not involved"],has_nr:false},
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Not involved"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"I don't know",val:"idk",tier:"idk"}]},
   {text:"To what extent did the partnership involve relevant end users or their representatives in shaping the scaling approach?",
-   opts:["Full extent","Large extent","Moderate extent","Small extent","Not involved"],has_nr:false}
+   opts:["Full extent","Large extent","Moderate extent","Small extent","Not involved"],
+   tiers:["sat","sat","unsat","unsat","unsat"],
+   special:[{label:"I don't know",val:"idk",tier:"idk"}]}
 ];
 
 var TOKEN = '';
@@ -408,13 +468,17 @@ function applyLoadResult(loadingEl, errorEl, startBtn){
 function buildStageOptions(){
   var select = document.getElementById('r-stage');
   select.innerHTML = '<option value="">-- select a stage --</option>';
-  session.openStages.forEach(function(si){
-    if(session.completedStages.indexOf(si) > -1) return;
+  for(var i=0;i<STAGES.length;i++){
+    if(session.openStages.indexOf(i) === -1) continue; // not open by facilitator
+    if(session.completedStages.indexOf(i) > -1) continue; // already completed
     var opt = document.createElement('option');
-    opt.value = si;
-    opt.textContent = 'Stage '+(si+1)+': '+STAGES[si].name;
+    opt.value = i;
+    // Sequential lock: stage i requires stage i-1 to be completed (except stage 0)
+    var seqOk = (i === 0) || (session.completedStages.indexOf(i-1) > -1);
+    opt.textContent = 'Stage '+(i+1)+': '+STAGES[i].name + (seqOk ? '' : ' — complete Stage '+i+' first');
+    opt.disabled = !seqOk;
     select.appendChild(opt);
-  });
+  }
   validateDetailsForm();
 }
 
@@ -486,17 +550,19 @@ function renderQuestion(){
     container.appendChild(btn);
   });
 
-  // NR option
+  // Special options (Not Relevant, I don't know, etc.)
   var nrWrap = document.getElementById('resp-nr-wrap');
   nrWrap.innerHTML = '';
-  if(q.has_nr){
-    var nrBtn = document.createElement('button');
-    nrBtn.type = 'button';
-    nrBtn.className = 'resp-btn-nr' + (current && current.v === 'nr' ? ' sel' : '');
-    nrBtn.setAttribute('data-val', 'nr');
-    nrBtn.textContent = 'Not Relevant';
-    nrBtn.onclick = function(){ selectAnswer('nr'); };
-    nrWrap.appendChild(nrBtn);
+  if(q.special && q.special.length){
+    q.special.forEach(function(sp){
+      var spBtn = document.createElement('button');
+      spBtn.type = 'button';
+      spBtn.className = 'resp-btn-nr' + (current && current.v === sp.val ? ' sel' : '');
+      spBtn.setAttribute('data-val', sp.val);
+      spBtn.textContent = sp.label;
+      spBtn.onclick = (function(v){ return function(){ selectAnswer(v); }; })(sp.val);
+      nrWrap.appendChild(spBtn);
+    });
   }
 
   // Notes
@@ -518,8 +584,9 @@ function selectAnswer(val){
   document.querySelectorAll('#resp-options .resp-btn').forEach(function(btn){
     btn.classList.toggle('sel', parseInt(btn.getAttribute('data-val')) === val);
   });
-  var nrBtn = document.querySelector('#resp-nr-wrap .resp-btn-nr');
-  if(nrBtn) nrBtn.classList.toggle('sel', val === 'nr');
+  document.querySelectorAll('#resp-nr-wrap .resp-btn-nr').forEach(function(btn){
+    btn.classList.toggle('sel', btn.getAttribute('data-val') === String(val));
+  });
 
   document.getElementById('err-answer').classList.remove('show');
 
