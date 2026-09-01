@@ -622,8 +622,8 @@ function renderQuestion(){
 }
 
 function selectAnswer(val){
-  var stage = STAGES[session.currentStageIdx];
-  var qIdx = stage.qs[session.currentQPos];
+  var qList = session.recheckMode ? session.recheckQIndices : STAGES[session.currentStageIdx].qs;
+  var qIdx = qList[session.currentQPos];
   var existingNote = session.answers[qIdx] ? session.answers[qIdx].note : '';
   session.answers[qIdx] = {v: val, note: existingNote};
 
@@ -637,8 +637,8 @@ function selectAnswer(val){
 
   document.getElementById('err-answer').classList.remove('show');
 
-  var total = stage.qs.length;
-  var answered = stage.qs.filter(function(qi){return session.answers[qi] && session.answers[qi].v !== null;}).length;
+  var total = qList.length;
+  var answered = qList.filter(function(qi){return session.answers[qi] && session.answers[qi].v !== null;}).length;
   document.getElementById('prog-fill').style.width = Math.round((answered/total)*100)+'%';
 
   if(session.currentQPos === total-1){
@@ -647,9 +647,9 @@ function selectAnswer(val){
 }
 
 function updateCurrentNote(value){
-  var stage = STAGES[session.currentStageIdx];
-  var qIdx = stage.qs[session.currentQPos];
-  session.answers[qIdx].note = value;
+  var qList = session.recheckMode ? session.recheckQIndices : STAGES[session.currentStageIdx].qs;
+  var qIdx = qList[session.currentQPos];
+  if(session.answers[qIdx]) session.answers[qIdx].note = value;
 }
 
 function goNext(){
