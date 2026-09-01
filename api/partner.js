@@ -1,5 +1,6 @@
 const { getRecords, getRecord, setCors } = require('./_lib');
 
+
 module.exports = async function handler(req, res) {
   setCors(res);
   if (req.method === 'OPTIONS') return res.status(200).end();
@@ -10,7 +11,7 @@ module.exports = async function handler(req, res) {
 
   try {
     const partnerResult = await getRecords('Partners', `{token}="${token}"`,
-      ['organisation_name', 'project_id']);
+      ['organisation_name', 'project_id', 'reopened_questions']);
     if (!partnerResult.records.length) {
       return res.status(404).json({ error: 'Invalid or unrecognised link' });
     }
@@ -28,12 +29,16 @@ module.exports = async function handler(req, res) {
     let open_stages = [0,1,2,3,4,5];
     try { open_stages = JSON.parse(project.fields.open_stages || '[0,1,2,3,4,5]'); } catch(e) {}
 
+    let reopened_questions = [];
+    try { reopened_questions = JSON.parse(partnerRec.fields.reopened_questions || '[]'); } catch(e) {}
+
     res.status(200).json({
       project_id,
       project_title: project.fields.title || '',
       organisation_name: partnerRec.fields.organisation_name || '',
       completed_stages,
-      open_stages
+      open_stages,
+      reopened_questions
     });
   } catch (err) {
     console.error('GET /api/partner:', err);

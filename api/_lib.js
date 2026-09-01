@@ -46,10 +46,17 @@ async function createRecords(table, fieldsArray) {
   });
 }
 
+async function updateRecord(table, id, fields) {
+  return atFetch(`/${encodeURIComponent(table)}/${encodeURIComponent(id)}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ fields })
+  });
+}
+
 function setCors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 }
 
-module.exports = { getRecord, getRecords, createRecord, createRecords, setCors };
+module.exports = { getRecord, getRecords, createRecord, createRecords, updateRecord, setCors };

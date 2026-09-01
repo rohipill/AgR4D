@@ -169,6 +169,12 @@ textarea.notes-input{font-size:14px;resize:vertical;min-height:68px;padding:8px 
         </select>
         <div class="alert-error" id="err-stage-lock" style="margin-top:6px;font-size:12px;padding:.5rem .75rem;display:none"></div>
       </div>
+      <div id="recheck-notice" class="alert alert-warn" style="display:none;margin-top:.75rem">
+        Your facilitator has flagged <strong><span id="recheck-count">0</span> question(s)</strong> for re-assessment.
+        <div style="margin-top:.6rem">
+          <button class="btn btn-sm btn-primary" onclick="startRecheck()">Re-assess flagged questions &rarr;</button>
+        </div>
+      </div>
       <div class="alert alert-error" id="err-details">Please fill in your name and select a stage to continue.</div>
       <div class="btn-row">
         <button class="btn btn-primary" id="btn-start" onclick="startQuestionnaire()" disabled>Start questionnaire &rarr;</button>
@@ -380,7 +386,9 @@ var session = {
   currentQPos: 0,
   answers: [],
   completedStages: [],
-  openStages: [0,1,2,3,4,5]
+  openStages: [0,1,2,3,4,5],
+  recheckMode: false,
+  recheckQIndices: []
 };
 
 function showScreen(id){
@@ -462,7 +470,15 @@ function applyLoadResult(loadingEl, errorEl, startBtn){
   document.getElementById('r-org').value = data.organisation_name || '';
   session.completedStages = data.completed_stages || [];
   session.openStages = data.open_stages || [0,1,2,3,4,5];
+  session.recheckQIndices = data.reopened_questions || [];
   buildStageOptions();
+  var recheckNotice = document.getElementById('recheck-notice');
+  if(session.recheckQIndices.length){
+    recheckNotice.style.display = 'block';
+    document.getElementById('recheck-count').textContent = session.recheckQIndices.length;
+  } else {
+    recheckNotice.style.display = 'none';
+  }
 }
 
 function buildStageOptions(){
@@ -500,6 +516,7 @@ function startQuestionnaire(){
     name: name,
     designation: document.getElementById('r-designation').value.trim()
   };
+  session.recheckMode = false;
   session.currentStageIdx = parseInt(sv);
   session.currentQPos = 0;
   initAnswers();
@@ -507,19 +524,45 @@ function startQuestionnaire(){
   showScreen('screen-question');
 }
 
+function startRecheck(){
+  var name = document.getElementById('r-name').value.trim();
+  var err = document.getElementById('err-details');
+  if(!name){ err.classList.add('show'); return; }
+  err.classList.remove('show');
+  session.respondent = {
+    project: document.getElementById('r-project').value.trim(),
+    org: document.getElementById('r-org').value.trim(),
+    name: name,
+    designation: document.getElementById('r-designation').value.trim()
+  };
+  session.recheckMode = true;
+  session.currentQPos = 0;
+  initAnswers();
+  renderQuestion();
+  showScreen('screen-question');
+}
+
 function renderQuestion(){
-  var stage = STAGES[session.currentStageIdx];
-  var qIdx = stage.qs[session.currentQPos];
+  var qList = session.recheckMode
+    ? session.recheckQIndices
+    : STAGES[session.currentStageIdx].qs;
+  var qIdx = qList[session.currentQPos];
   var q = QUESTIONS[qIdx];
   var pos = session.currentQPos;
-  var total = stage.qs.length;
+  var total = qList.length;
   var current = session.answers[qIdx];
 
-  var answered = stage.qs.filter(function(qi){return session.answers[qi] && session.answers[qi].v !== null;}).length;
+  var answered = qList.filter(function(qi){return session.answers[qi] && session.answers[qi].v !== null;}).length;
   document.getElementById('prog-fill').style.width = Math.round((answered/total)*100)+'%';
-  document.getElementById('prog-stage-label').textContent = stage.short+': '+stage.name;
+  if(session.recheckMode){
+    document.getElementById('prog-stage-label').textContent = 'Re-assessment';
+    document.getElementById('q-stage-pill').textContent = 'Re-assessment';
+  } else {
+    var stage = STAGES[session.currentStageIdx];
+    document.getElementById('prog-stage-label').textContent = stage.short+': '+stage.name;
+    document.getElementById('q-stage-pill').textContent = stage.short;
+  }
   document.getElementById('prog-fraction').textContent = 'Question '+(pos+1)+' of '+total;
-  document.getElementById('q-stage-pill').textContent = stage.short;
   document.getElementById('q-eyebrow').textContent = 'Question '+(pos+1)+' of '+total;
   document.getElementById('q-text').textContent = q.text;
 
@@ -570,7 +613,9 @@ function renderQuestion(){
 
   var nextBtn = document.getElementById('q-next-btn');
   var isLast = pos === total-1;
-  nextBtn.textContent = isLast ? 'Submit stage ✓' : 'Next →';
+  nextBtn.textContent = isLast
+    ? (session.recheckMode ? 'Submit re-assessment ✓' : 'Submit stage ✓')
+    : 'Next →';
   nextBtn.disabled = isLast && (!current || current.v === null);
 }
 
@@ -606,18 +651,19 @@ function updateCurrentNote(value){
 }
 
 function goNext(){
-  var stage = STAGES[session.currentStageIdx];
-  var qIdx = stage.qs[session.currentQPos];
+  var qList = session.recheckMode ? session.recheckQIndices : STAGES[session.currentStageIdx].qs;
+  var qIdx = qList[session.currentQPos];
   if(!session.answers[qIdx] || session.answers[qIdx].v === null){
     document.getElementById('err-answer').classList.add('show');
     return;
   }
-  if(session.currentQPos < stage.qs.length-1){
+  if(session.currentQPos < qList.length-1){
     session.currentQPos++;
     renderQuestion();
     window.scrollTo(0,0);
   } else {
-    submitStage();
+    if(session.recheckMode) submitRecheck();
+    else submitStage();
   }
 }
 
@@ -661,6 +707,40 @@ async function submitStage(){
     alert('Could not save your responses: '+e.message+'\n\nPlease check your connection and try again.');
     nextBtn.disabled = false;
     nextBtn.textContent = 'Submit stage ✓';
+  }
+}
+
+async function submitRecheck(){
+  var nextBtn = document.getElementById('q-next-btn');
+  nextBtn.disabled = true;
+  nextBtn.textContent = 'Saving…';
+  var answers = session.recheckQIndices.map(function(qi){
+    var ans = session.answers[qi] || {v:null,note:''};
+    return {q_idx:qi, v:ans.v, note:ans.note||''};
+  }).filter(function(a){return a.v !== null;});
+  try{
+    var res = await fetch((API_BASE||'')+'/api/recheck',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({token:TOKEN, answers:answers})
+    });
+    var data = await res.json();
+    if(!res.ok){
+      alert('Error saving re-assessment: '+(data.error||'Unknown error')+'\n\nPlease try again.');
+      nextBtn.disabled=false;
+      nextBtn.textContent='Submit re-assessment ✓';
+      return;
+    }
+    session.recheckQIndices = [];
+    document.getElementById('recheck-notice').style.display='none';
+    document.getElementById('stage-complete-title').textContent='Re-assessment submitted';
+    document.getElementById('stage-complete-msg').textContent='Thank you. Your re-assessed responses have been recorded.';
+    document.getElementById('btn-next-stage').style.display='none';
+    showScreen('screen-stage-complete');
+  }catch(e){
+    alert('Could not save re-assessment: '+e.message+'\n\nPlease check your connection and try again.');
+    nextBtn.disabled=false;
+    nextBtn.textContent='Submit re-assessment ✓';
   }
 }
 

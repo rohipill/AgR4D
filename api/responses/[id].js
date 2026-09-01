@@ -15,20 +15,25 @@ module.exports = async function handler(req, res) {
       getRecords('Responses', `{project_id}="${id}"`,
         ['token', 'respondent_name', 'respondent_designation', 'stage_index', 'answers']),
       getRecords('Partners', `{project_id}="${id}"`,
-        ['token', 'organisation_name'])
+        ['token', 'organisation_name', 'recheck_answers'])
     ]);
 
     const tokenToOrg = {};
+    const tokenToRecheck = {};
     partnersResult.records.forEach(r => {
       tokenToOrg[r.fields.token] = r.fields.organisation_name || '';
+      try { tokenToRecheck[r.fields.token] = JSON.parse(r.fields.recheck_answers || '{}'); }
+      catch (e) { tokenToRecheck[r.fields.token] = {}; }
     });
 
     const responses = responsesResult.records.map(r => ({
+      token: r.fields.token,
       respondent_name: r.fields.respondent_name || '',
       respondent_designation: r.fields.respondent_designation || '',
       organisation_name: tokenToOrg[r.fields.token] || '',
       stage_index: r.fields.stage_index,
-      answers: JSON.parse(r.fields.answers || '[]')
+      answers: JSON.parse(r.fields.answers || '[]'),
+      recheck_answers: tokenToRecheck[r.fields.token] || {}
     }));
 
     res.status(200).json({ responses });
