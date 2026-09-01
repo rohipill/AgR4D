@@ -908,7 +908,9 @@ async function renderDashboard(){
 
       stage.qs.forEach(function(qIdx){
         var result=computeIndicator(qIdx);
-        var dotClass=result.color==='green'?'dot-green':result.color==='red'?'dot-red':'dot-none';
+        var finalColor=computeFinalIndicator(qIdx,result.color);
+        var dotClass=finalColor==='green'?'dot-green':finalColor==='red'?'dot-red':'dot-none';
+        var statusChanged=(result.color==='red'&&finalColor==='green');
         var savedNote=(_indNotes[qIdx]&&_indNotes[qIdx].actions)||'';
 
         var item=document.createElement('div');
@@ -961,11 +963,11 @@ async function renderDashboard(){
         }
         var statusSpan=document.createElement('span');
         statusSpan.className='ind-meta-item';
-        statusSpan.innerHTML='Initial status: ';
+        statusSpan.innerHTML='Status: ';
         var statusBadge=document.createElement('span');
         statusBadge.style.cssText='display:inline-block;width:10px;height:10px;border-radius:50%;margin-left:4px;vertical-align:middle';
-        if(result.color==='green'){statusBadge.style.background='var(--green)';}
-        else if(result.color==='red'){statusBadge.style.background='var(--red)';}
+        if(finalColor==='green'){statusBadge.style.background='var(--green)';}
+        else if(finalColor==='red'){statusBadge.style.background='var(--red)';}
         else{statusBadge.style.background='var(--border-strong)';}
         statusSpan.appendChild(statusBadge);
         metaRow.appendChild(statusSpan);
@@ -1022,6 +1024,12 @@ async function renderDashboard(){
 
         var actSection=document.createElement('div');
         actSection.className='actions-section';
+        if(statusChanged){
+          var changeNote=document.createElement('div');
+          changeNote.style.cssText='font-size:12px;color:var(--green);margin-bottom:6px;';
+          changeNote.textContent='Status changed following reassignment';
+          actSection.appendChild(changeNote);
+        }
         var actLabel=document.createElement('div');actLabel.className='actions-label';actLabel.textContent='Actions taken to address gaps';
         actSection.appendChild(actLabel);
         var actTA=document.createElement('textarea');
@@ -1029,17 +1037,6 @@ async function renderDashboard(){
         actTA.placeholder='Record corrective actions reported by partners…';
         actTA.oninput=(function(qi){return function(){saveIndNote(qi,'actions',this.value);};})(qIdx);
         actSection.appendChild(actTA);
-        var finalRow=document.createElement('div');finalRow.className='final-status-row';
-        var finalLabel=document.createElement('span');finalLabel.className='final-status-label';finalLabel.textContent='Final status:';
-        finalRow.appendChild(finalLabel);
-        var finalColor=computeFinalIndicator(qIdx,result.color);
-        var finalBadge=document.createElement('span');
-        finalBadge.style.cssText='display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:middle';
-        if(finalColor==='green'){finalBadge.style.background='var(--green)';}
-        else if(finalColor==='red'){finalBadge.style.background='var(--red)';}
-        else{finalBadge.style.background='var(--border-strong)';}
-        finalRow.appendChild(finalBadge);
-        actSection.appendChild(finalRow);
         panel.appendChild(actSection);
 
         indHdr.addEventListener('click',function(){
